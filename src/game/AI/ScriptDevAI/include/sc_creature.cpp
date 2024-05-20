@@ -247,14 +247,14 @@ SpellEntry const* ScriptedAI::SelectSpell(Unit* pTarget, int32 uiSchool, int32 i
             continue;
 
         // Make sure that the spell uses the requested amount of power
-        if (uiPowerCostMin &&  pTempSpell->GetManaCost() < uiPowerCostMin)
+        if (uiPowerCostMin &&  pTempSpell->ManaCost < uiPowerCostMin)
             continue;
 
-        if (uiPowerCostMax && pTempSpell->GetManaCost() > uiPowerCostMax)
+        if (uiPowerCostMax && pTempSpell->ManaCost > uiPowerCostMax)
             continue;
 
         // Continue if we don't have the mana to actually cast this spell
-        if (pTempSpell->GetManaCost() > m_creature->GetPower((Powers)pTempSpell->powerType))
+        if (pTempSpell->ManaCost > m_creature->GetPower((Powers)pTempSpell->powerType))
             continue;
 
         // Get the Range
@@ -298,7 +298,7 @@ bool ScriptedAI::CanCast(Unit* pTarget, SpellEntry const* pSpellEntry, bool bTri
         return false;
 
     // Check for power
-    if (!bTriggered && m_creature->GetPower((Powers)pSpellEntry->powerType) < pSpellEntry->GetManaCost())
+    if (!bTriggered && m_creature->GetPower((Powers)pSpellEntry->powerType) < pSpellEntry->ManaCost)
         return false;
 
     SpellRangeEntry const* pTempRange = GetSpellRangeStore()->LookupEntry(pSpellEntry->rangeIndex);

@@ -6997,9 +6997,9 @@ uint32 Spell::CalculatePowerCost(SpellEntry const* spellInfo, Unit* caster, Spel
     }
 
     // Base powerCost
-    int32 powerCost = spellInfo->GetManaCost();
+    int32 powerCost = spellInfo->ManaCost;
     // PCT cost from total amount
-    if (uint32 manaCostPct = spellInfo->GetManaCostPercentage())
+    if (uint32 manaCostPct = spellInfo->ManaCostPercentage)
     {
         switch (spellInfo->powerType)
         {
@@ -7899,7 +7899,7 @@ bool Spell::IsNeedSendToClient() const
 
 bool Spell::IsTriggeredSpellWithRedundentCastTime() const
 {
-    return m_IsTriggeredSpell && (m_spellInfo->GetManaCost() || m_spellInfo->GetManaCostPercentage());
+    return m_IsTriggeredSpell && (m_spellInfo->ManaCost || m_spellInfo->ManaCostPercentage);
 }
 
 bool Spell::HaveTargetsForEffect(SpellEffectIndex effect) const

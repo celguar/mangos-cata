@@ -3359,7 +3359,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
                         if (Unit* caster = GetCaster())
                         {
-                            int32 returnmana = (GetSpellProto()->GetManaCostPercentage() * caster->GetCreateMana() / 100) * GetStackAmount() / 2;
+                            int32 returnmana = (GetSpellProto()->ManaCostPercentage * caster->GetCreateMana() / 100) * GetStackAmount() / 2;
                             caster->CastCustomSpell(caster, 64372, &returnmana, nullptr, nullptr, TRIGGERED_OLD_TRIGGERED, nullptr, this, GetCasterGuid());
                         }
                     }
@@ -7627,7 +7627,7 @@ void Aura::PeriodicTick()
                 // apply damage part to caster if needed (ex. health funnel)
                 if (target != pCaster && spellProto->SpellVisual[0] == 163)
                 {
-                    uint32 damage = spellProto->GetManaPerSecond();
+                    uint32 damage = spellProto->ManaPerSecond;
                     uint32 absorb = 0;
 
                     pCaster->DealDamageMods(pCaster, damage, &absorb, NODAMAGE, spellProto);
@@ -7685,7 +7685,7 @@ void Aura::PeriodicTick()
 
             // Special case: draining x% of mana (up to a maximum of 2*x% of the caster's maximum mana)
             // It's mana percent cost spells, m_modifier.m_amount is percent drain from target
-            if (spellProto->GetManaCostPercentage())
+            if (spellProto->ManaCostPercentage)
             {
                 // max value
                 uint32 maxmana = pCaster->GetMaxPower(power)  * pdamage * 2 / 100;
@@ -10373,17 +10373,15 @@ void SpellAuraHolder::Update(uint32 diff)
             if (Unit* caster = GetCaster())
             {
                 Powers powertype = Powers(GetSpellProto()->powerType);
+                int32 manaPerSecond = GetSpellProto()->ManaPerSecond + GetSpellProto()->ManaPerSecondPerLevel * GetTarget()->GetLevel();
                 m_timeCla = 1*IN_MILLISECONDS;
 
-                if (SpellPowerEntry const* spellPower = GetSpellProto()->GetSpellPower())
+                if (manaPerSecond)
                 {
-                    if (int32 manaPerSecond = spellPower->manaPerSecond)
-                    {
-                        if (powertype == POWER_HEALTH)
-                            caster->ModifyHealth(-manaPerSecond);
-                        else
-                            caster->ModifyPower(powertype, -manaPerSecond);
-                    }
+                    if (powertype == POWER_HEALTH)
+                        caster->ModifyHealth(-manaPerSecond);
+                    else
+                        caster->ModifyPower(powertype, -manaPerSecond);
                 }
             }
 

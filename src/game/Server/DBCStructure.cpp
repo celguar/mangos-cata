@@ -49,11 +49,6 @@ SpellEffectEntry const* SpellEntry::GetSpellEffect(SpellEffectIndex eff) const
     return GetSpellEffectEntry(Id, eff);
 }
 
-SpellPowerEntry const* SpellEntry::GetSpellPower() const
-{
-    return SpellPowerId ? sSpellPowerStore.LookupEntry(SpellPowerId) : NULL;
-}
-
 SpellReagentsEntry const* SpellEntry::GetSpellReagents() const
 {
     return SpellReagentsId ? sSpellReagentsStore.LookupEntry(SpellReagentsId) : NULL;
@@ -77,12 +72,6 @@ SpellTargetRestrictionsEntry const* SpellEntry::GetSpellTargetRestrictions() con
 SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
 {
     return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
-}
-
-uint32 SpellEntry::GetManaCost() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->manaCost : 0;
 }
 
 uint32 SpellEntry::GetPreventionType() const
@@ -127,18 +116,6 @@ uint32 SpellEntry::GetMaxAffectedTargets() const
     return target ? target->MaxAffectedTargets : 0;
 }
 
-uint32 SpellEntry::GetManaCostPercentage() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->ManaCostPercentage : 0;
-}
-
-uint32 SpellEntry::GetManaPerSecond() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->manaPerSecond : 0;
-}
-
 uint32 SpellEntry::GetSpellEffectIdByIndex(SpellEffectIndex index) const
 {
     SpellEffectEntry const* effect = GetSpellEffect(index);
@@ -173,12 +150,6 @@ uint32 SpellEntry::GetStancesNot() const
 {
     SpellShapeshiftEntry const* ss = GetSpellShapeshift();
     return ss ? ss->StancesNot : 0;
-}
-
-uint32 SpellEntry::GetManaCostPerLevel() const
-{
-    SpellPowerEntry const* power = GetSpellPower();
-    return power ? power->manaCostPerlevel : 0;
 }
 
 uint32 SpellEntry::GetTargets() const

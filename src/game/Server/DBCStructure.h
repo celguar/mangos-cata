@@ -1836,19 +1836,6 @@ struct SpellItemEnchantmentConditionEntry
     //uint8   Logic[5]                                      // 25-30    m_logic[5]
 };
 
-// SpellPower.dbc
-struct SpellPowerEntry
-{
-    //uint32    Id;                                         // 0 - m_ID
-    uint32    manaCost;                                     // 1 - m_manaCost
-    uint32    manaCostPerlevel;                             // 2 - m_manaCostPerLevel
-    uint32    ManaCostPercentage;                           // 3 - m_manaCostPct
-    uint32    manaPerSecond;                                // 4 - m_manaPerSecond
-    uint32    manaPerSecondPerLevel;                        // 5   m_manaPerSecondPerLevel
-    //uint32  PowerDisplayId;                               // 6 - m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
-    float     ManaCostPercentageFloat;                      // 7   4.3.0
-};
-
 // SpellRadius.dbc
 struct SpellRadiusEntry
 {
@@ -2020,12 +2007,18 @@ struct SpellEntry
     uint32 BaseLevel;                                       // 62       m_baseLevel
     uint32 MaxLevel;                                        // 63       m_maxLevel
     uint32 SpellLevel;                                      // 64       m_spellLevel
-    uint32 SpellPowerId;                                    // 65       SpellPower.dbc
-    uint32 SpellReagentsId;                                 // 66       SpellReagents.dbc
-    uint32 SpellShapeshiftId;                               // 67       SpellShapeshift.dbc
-    uint32 SpellTargetRestrictionsId;                       // 68       SpellTargetRestrictions.dbc
-    uint32 SpellTotemsId;                                   // 69       SpellTotems.dbc
-    //uint32 ResearchProjectId;                             // 70       ResearchProject.dbc
+    uint32 ManaCost;                                        // 65       m_manaCost
+    uint32 ManaCostPerlevel;                                // 66       m_manaCostPerLevel
+    uint32 ManaCostPercentage;                              // 67       m_manaCostPct
+    uint32 ManaPerSecond;                                   // 68       m_manaPerSecond
+    uint32 ManaPerSecondPerLevel;                           // 69       m_manaPerSecondPerLevel
+    //uint32 PowerDisplayId;                                // 70       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
+    float  ManaCostPercentageFloat;                         // 71       4.3.0
+    uint32 SpellReagentsId;                                 // 72       SpellReagents.dbc
+    uint32 SpellShapeshiftId;                               // 73       SpellShapeshift.dbc
+    uint32 SpellTargetRestrictionsId;                       // 74       SpellTargetRestrictions.dbc
+    uint32 SpellTotemsId;                                   // 75       SpellTotems.dbc
+    //uint32 ResearchProjectId;                             // 76       ResearchProject.dbc
 
     // helpers
     int32 CalculateSimpleValue(SpellEffectIndex eff) const;
@@ -2034,7 +2027,6 @@ struct SpellEntry
     // struct access functions
     SpellCategoriesEntry const* GetSpellCategories() const;
     SpellEffectEntry const* GetSpellEffect(SpellEffectIndex eff) const;
-    SpellPowerEntry const* GetSpellPower() const;
     SpellReagentsEntry const* GetSpellReagents() const;
     SpellScalingEntry const* GetSpellScaling() const;
     SpellShapeshiftEntry const* GetSpellShapeshift() const;
@@ -2042,7 +2034,6 @@ struct SpellEntry
     SpellTotemsEntry const* GetSpellTotems() const;
 
     // single fields
-    uint32 GetManaCost() const;
     uint32 GetPreventionType() const;
     uint32 GetCategory() const;
     uint32 GetMechanic() const;
@@ -2050,15 +2041,12 @@ struct SpellEntry
     uint32 GetDmgClass() const;
     uint32 GetDispel() const;
     uint32 GetMaxAffectedTargets() const;
-    uint32 GetManaCostPercentage() const;
-    uint32 GetManaPerSecond() const;
     uint32 GetSpellEffectIdByIndex(SpellEffectIndex index) const;
     uint32 GetEffectImplicitTargetAByIndex(SpellEffectIndex index) const;
     uint32 GetTargetCreatureType() const;
     int32 GetEffectMiscValue(SpellEffectIndex index) const;
     uint32 GetStances() const;
     uint32 GetStancesNot() const;
-    uint32 GetManaCostPerLevel() const;
     uint32 GetTargets() const;
     uint32 GetEffectApplyAuraNameByIndex(SpellEffectIndex index) const;
 

@@ -4780,7 +4780,7 @@ void Spell::EffectPowerBurn(SpellEffectEntry const* effect)
         return;
 
     // burn x% of target's mana, up to maximum of 2x% of caster's mana (Mana Burn)
-    if (m_spellInfo->GetManaCostPercentage())
+    if (m_spellInfo->ManaCostPercentage)
     {
         int32 maxdamage = m_caster->GetMaxPower(powertype) * damage * 2 / 100;
         damage = unitTarget->GetMaxPower(powertype) * damage / 100;
@@ -11489,7 +11489,7 @@ void Spell::EffectDestroyAllTotems(SpellEffectEntry const* /*effect*/)
                 uint32 spell_id = totem->GetUInt32Value(UNIT_CREATED_BY_SPELL);
                 if (SpellEntry const* spellInfo = sSpellTemplate.LookupEntry<SpellEntry>(spell_id))
                 {
-                    uint32 manacost = m_caster->GetCreateMana() * spellInfo->GetManaCostPercentage() / 100;
+                    uint32 manacost = m_caster->GetCreateMana() * spellInfo->ManaCostPercentage / 100;
                     mana += manacost * damage / 100;
                 }
             }

@@ -1759,7 +1759,7 @@ SpellEntry const* Creature::ReachWithSpellAttack(Unit* pVictim)
         if (bcontinue)
             continue;
 
-        if(spellInfo->GetManaCost() > GetPower(POWER_MANA))
+        if(spellInfo->ManaCost > GetPower(POWER_MANA))
             continue;
 
         SpellRangeEntry const* srange = sSpellRangeStore.LookupEntry(spellInfo->rangeIndex);
@@ -1815,7 +1815,7 @@ SpellEntry const* Creature::ReachWithSpellCure(Unit* pVictim)
         if (bcontinue)
             continue;
 
-        if(spellInfo->GetManaCost() > GetPower(POWER_MANA))
+        if(spellInfo->ManaCost > GetPower(POWER_MANA))
             continue;
 
         SpellRangeEntry const* srange = sSpellRangeStore.LookupEntry(spellInfo->rangeIndex);

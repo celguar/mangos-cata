@@ -5501,7 +5501,7 @@ void Unit::RemoveAuraHolderDueToSpellByDispel(uint32 spellId, uint32 stackAmount
 
             if (Unit* caster = dotAura->GetCaster())
             {
-                int32 returnmana = (spellEntry->GetManaCostPercentage() * caster->GetCreateMana() / 100) * stackAmount / 2;
+                int32 returnmana = (spellEntry->ManaCostPercentage * caster->GetCreateMana() / 100) * stackAmount / 2;
                 caster->CastCustomSpell(caster, 64372, &returnmana, nullptr, nullptr, TRIGGERED_OLD_TRIGGERED, nullptr, dotAura, casterGuid);
             }
         }
