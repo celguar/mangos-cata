@@ -177,7 +177,6 @@ SpellCategoryStore sSpellCategoryStore;
 ItemSpellCategoryStore sItemSpellCategoryStore;
 PetFamilySpellsStore sPetFamilySpellsStore;
 
-DBCStorage <SpellLevelsEntry> sSpellLevelsStore(SpellLevelsEntryfmt);
 DBCStorage <SpellPowerEntry> sSpellPowerStore(SpellPowerEntryfmt);
 DBCStorage <SpellReagentsEntry> sSpellReagentsStore(SpellReagentsEntryfmt);
 DBCStorage <SpellScalingEntry> sSpellScalingStore(SpellScalingEntryfmt);
@@ -620,7 +619,6 @@ void LoadDBCStores(const std::string& dataPath)
         }
     }
 
-    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSpellLevelsStore,         dbcPath,"SpellLevels.dbc");
     LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSpellPowerStore,          dbcPath,"SpellPower.dbc");
     LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSpellReagentsStore,       dbcPath,"SpellReagents.dbc");
     LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSpellScalingStore,        dbcPath,"SpellScaling.dbc");

@@ -49,11 +49,6 @@ SpellEffectEntry const* SpellEntry::GetSpellEffect(SpellEffectIndex eff) const
     return GetSpellEffectEntry(Id, eff);
 }
 
-SpellLevelsEntry const* SpellEntry::GetSpellLevels() const
-{
-    return SpellLevelsId ? sSpellLevelsStore.LookupEntry(SpellLevelsId) : NULL;
-}
-
 SpellPowerEntry const* SpellEntry::GetSpellPower() const
 {
     return SpellPowerId ? sSpellPowerStore.LookupEntry(SpellPowerId) : NULL;
@@ -114,12 +109,6 @@ uint32 SpellEntry::GetStartRecoveryCategory() const
     return cat ? cat->StartRecoveryCategory : 0;
 }
 
-uint32 SpellEntry::GetSpellLevel() const
-{
-    SpellLevelsEntry const* levels = GetSpellLevels();
-    return levels ? levels->spellLevel : 0;
-}
-
 uint32 SpellEntry::GetDmgClass() const
 {
     SpellCategoriesEntry const* cat = GetSpellCategories();
@@ -144,12 +133,6 @@ uint32 SpellEntry::GetManaCostPercentage() const
     return power ? power->ManaCostPercentage : 0;
 }
 
-uint32 SpellEntry::GetMaxLevel() const
-{
-    SpellLevelsEntry const* levels = GetSpellLevels();
-    return levels ? levels->maxLevel : 0;
-}
-
 uint32 SpellEntry::GetManaPerSecond() const
 {
     SpellPowerEntry const* power = GetSpellPower();
@@ -166,12 +149,6 @@ uint32 SpellEntry::GetEffectImplicitTargetAByIndex(SpellEffectIndex index) const
 {
     SpellEffectEntry const* effect = GetSpellEffect(index);
     return effect ? effect->EffectImplicitTargetA : TARGET_NONE;
-}
-
-uint32 SpellEntry::GetBaseLevel() const
-{
-    SpellLevelsEntry const* levels = GetSpellLevels();
-    return levels ? levels->baseLevel : 0;
 }
 
 uint32 SpellEntry::GetTargetCreatureType() const

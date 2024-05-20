@@ -1836,15 +1836,6 @@ struct SpellItemEnchantmentConditionEntry
     //uint8   Logic[5]                                      // 25-30    m_logic[5]
 };
 
-// SpellLevels.dbc
-struct SpellLevelsEntry
-{
-    //uint32    Id;                                         // 0        m_ID
-    uint32    baseLevel;                                    // 1        m_baseLevel
-    uint32    maxLevel;                                     // 2        m_maxLevel
-    uint32    spellLevel;                                   // 3        m_spellLevel
-};
-
 // SpellPower.dbc
 struct SpellPowerEntry
 {
@@ -2026,13 +2017,15 @@ struct SpellEntry
     uint32 AuraInterruptFlags;                              // 59       m_auraInterruptFlags
     uint32 ChannelInterruptFlags;                           // 60       m_channelInterruptFlags
     uint32 InterruptFlags;                                  // 61       m_interruptFlags
-    uint32 SpellLevelsId;                                   // 62       SpellLevels.dbc
-    uint32 SpellPowerId;                                    // 63       SpellPower.dbc
-    uint32 SpellReagentsId;                                 // 64       SpellReagents.dbc
-    uint32 SpellShapeshiftId;                               // 65       SpellShapeshift.dbc
-    uint32 SpellTargetRestrictionsId;                       // 66       SpellTargetRestrictions.dbc
-    uint32 SpellTotemsId;                                   // 67       SpellTotems.dbc
-    //uint32 ResearchProjectId;                             // 68       ResearchProject.dbc
+    uint32 BaseLevel;                                       // 62       m_baseLevel
+    uint32 MaxLevel;                                        // 63       m_maxLevel
+    uint32 SpellLevel;                                      // 64       m_spellLevel
+    uint32 SpellPowerId;                                    // 65       SpellPower.dbc
+    uint32 SpellReagentsId;                                 // 66       SpellReagents.dbc
+    uint32 SpellShapeshiftId;                               // 67       SpellShapeshift.dbc
+    uint32 SpellTargetRestrictionsId;                       // 68       SpellTargetRestrictions.dbc
+    uint32 SpellTotemsId;                                   // 69       SpellTotems.dbc
+    //uint32 ResearchProjectId;                             // 70       ResearchProject.dbc
 
     // helpers
     int32 CalculateSimpleValue(SpellEffectIndex eff) const;
@@ -2041,7 +2034,6 @@ struct SpellEntry
     // struct access functions
     SpellCategoriesEntry const* GetSpellCategories() const;
     SpellEffectEntry const* GetSpellEffect(SpellEffectIndex eff) const;
-    SpellLevelsEntry const* GetSpellLevels() const;
     SpellPowerEntry const* GetSpellPower() const;
     SpellReagentsEntry const* GetSpellReagents() const;
     SpellScalingEntry const* GetSpellScaling() const;
@@ -2055,16 +2047,13 @@ struct SpellEntry
     uint32 GetCategory() const;
     uint32 GetMechanic() const;
     uint32 GetStartRecoveryCategory() const;
-    uint32 GetSpellLevel() const;
     uint32 GetDmgClass() const;
     uint32 GetDispel() const;
     uint32 GetMaxAffectedTargets() const;
     uint32 GetManaCostPercentage() const;
-    uint32 GetMaxLevel() const;
     uint32 GetManaPerSecond() const;
     uint32 GetSpellEffectIdByIndex(SpellEffectIndex index) const;
     uint32 GetEffectImplicitTargetAByIndex(SpellEffectIndex index) const;
-    uint32 GetBaseLevel() const;
     uint32 GetTargetCreatureType() const;
     int32 GetEffectMiscValue(SpellEffectIndex index) const;
     uint32 GetStances() const;

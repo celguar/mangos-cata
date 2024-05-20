@@ -6021,7 +6021,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!learn_spellproto)
                     return SPELL_FAILED_NOT_KNOWN;
 
-                if(m_spellInfo->GetSpellLevel() > pet->GetLevel())
+                if(m_spellInfo->SpellLevel > pet->GetLevel())
                     return SPELL_FAILED_LOWLEVEL;
 
                 break;
@@ -6037,7 +6037,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 if (!learn_spellproto)
                     return SPELL_FAILED_NOT_KNOWN;
 
-                if(m_spellInfo->GetSpellLevel() > pet->GetLevel())
+                if(m_spellInfo->SpellLevel > pet->GetLevel())
                     return SPELL_FAILED_LOWLEVEL;
 
                 break;
@@ -7046,7 +7046,7 @@ uint32 Spell::CalculatePowerCost(SpellEntry const* spellInfo, Unit* caster, Spel
 
     if (!caster->IsControlledByPlayer() && spellInfo->HasAttribute(SPELL_ATTR_LEVEL_DAMAGE_CALCULATION))
     {
-        GtNPCManaCostScalerEntry const* spellScaler = sGtNPCManaCostScalerStore.LookupEntry(spellInfo->GetSpellLevel() - 1);
+        GtNPCManaCostScalerEntry const* spellScaler = sGtNPCManaCostScalerStore.LookupEntry(spellInfo->SpellLevel - 1);
         GtNPCManaCostScalerEntry const* casterScaler = sGtNPCManaCostScalerStore.LookupEntry(caster->GetLevel() - 1);
         if (spellScaler && casterScaler)
             powerCost *= casterScaler->ratio / spellScaler->ratio;
@@ -7378,7 +7378,7 @@ SpellCastResult Spell::CheckItems()
                 if (!targetItem)
                     return SPELL_FAILED_ITEM_NOT_FOUND;
 
-                if( targetItem->GetProto()->ItemLevel < m_spellInfo->GetBaseLevel() )
+                if(targetItem->GetProto()->ItemLevel < m_spellInfo->BaseLevel)
                     return SPELL_FAILED_LOWLEVEL;
                 // Check if we can store a new scroll, enchanting vellum has implicit SPELL_EFFECT_CREATE_ITEM
                 if (isVellumTarget && spellEffect->EffectItemType)

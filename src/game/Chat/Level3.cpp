@@ -2452,7 +2452,7 @@ bool ChatHandler::HandleLearnAllMySpellsCommand(char* /*args*/)
             continue;
 
         // skip server-side/triggered spells
-        if(spellInfo->GetSpellLevel()==0)
+        if(spellInfo->SpellLevel==0)
             continue;
 
         // skip wrong class/race skills

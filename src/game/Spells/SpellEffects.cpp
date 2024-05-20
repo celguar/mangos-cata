@@ -5263,7 +5263,7 @@ void Spell::EffectEnergize(SpellEffectEntry const* effect)
                     continue;
 
                 SpellEntry const *spellInfo = sSpellTemplate.LookupEntry<SpellEntry>(itr->first);
-                if (spellInfo && (spellInfo->GetSpellLevel() < m_spellInfo->GetSpellLevel() || spellInfo->GetSpellLevel() > unitTarget->GetLevel()))
+                if (spellInfo && (spellInfo->SpellLevel < m_spellInfo->SpellLevel || spellInfo->SpellLevel > unitTarget->GetLevel()))
                     continue;
 
                 elixirs.push_back(itr->first);

@@ -133,12 +133,9 @@ uint32 GetSpellCastTime(SpellEntry const* spellInfo, Spell const* spell)
         if (spell)
         {
             uint32 level = spell->GetCaster()->GetLevel();
-            if (SpellLevelsEntry const* levelsEntry = spellInfo->GetSpellLevels())
-            {
-                if (levelsEntry->maxLevel)
-                    level = std::min(level, levelsEntry->maxLevel);
-                level = std::max(level, levelsEntry->baseLevel) - levelsEntry->baseLevel;
-            }
+                if (spellInfo->MaxLevel)
+                    level = std::min(level, spellInfo->MaxLevel);
+                level = std::max(level, spellInfo->BaseLevel) - spellInfo->BaseLevel;
 
             // currently only profession spells have CastTimePerLevel data filled, always negative
             castTime = spellCastTimeEntry->CastTime + spellCastTimeEntry->CastTimePerLevel * level;
@@ -2744,7 +2741,7 @@ bool SpellMgr::IsSkillBonusSpell(uint32 spellId) const
 SpellEntry const* SpellMgr::SelectAuraRankForLevel(SpellEntry const* spellInfo, uint32 level) const
 {
     // fast case
-    if (level + 10 >= spellInfo->GetSpellLevel())
+    if (level + 10 >= spellInfo->SpellLevel)
         return spellInfo;
 
     // ignore selection for passive spells
@@ -2781,7 +2778,7 @@ SpellEntry const* SpellMgr::SelectAuraRankForLevel(SpellEntry const* spellInfo, 
             break;
 
         // if found appropriate level
-        if (level + 10 >= nextSpellInfo->GetSpellLevel())
+        if (level + 10 >= nextSpellInfo->SpellLevel)
             return nextSpellInfo;
 
         // one rank less then
@@ -3629,7 +3626,7 @@ void SpellMgr::LoadPetLevelupSpellMap()
             if (spellSet.empty())
                 ++family_count;
 
-            spellSet.insert(PetLevelupSpellSet::value_type(spell->GetSpellLevel(),spell->Id));
+            spellSet.insert(PetLevelupSpellSet::value_type(spell->SpellLevel,spell->Id));
             count++;
       }
     }

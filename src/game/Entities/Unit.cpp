@@ -2986,8 +2986,8 @@ uint32 Unit::CalculateDamage(WeaponAttackType attType, bool normalized)
 
 float Unit::CalculateLevelPenalty(SpellEntry const* spellProto) const
 {
-    uint32 spellLevel = spellProto->GetSpellLevel();
-    if (spellLevel <= 0 || spellLevel > spellProto->GetMaxLevel())
+    uint32 spellLevel = spellProto->SpellLevel;
+    if (spellLevel <= 0 || spellLevel > spellProto->MaxLevel)
         return 1.0f;
 
     float LvlPenalty = 0.0f;
@@ -10412,9 +10412,9 @@ int32 Unit::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProt
     }
     else
     {
-        spellLevel = spellProto->GetSpellLevel();
-        uint32 maxLevel = spellProto->GetMaxLevel();
-        uint32 baseLevel = spellProto->GetBaseLevel();
+        spellLevel = spellProto->SpellLevel;
+        uint32 maxLevel = spellProto->MaxLevel;
+        uint32 baseLevel = spellProto->BaseLevel;
 
         if (maxLevel)
             level = std::min(level, maxLevel);
@@ -10477,7 +10477,7 @@ int32 Unit::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProt
         if (spellProto->HasAttribute(SPELL_ATTR_LEVEL_DAMAGE_CALCULATION) && spellLevel)
         {
             if (spellEffect->EffectApplyAuraName)
-                value += (std::max<float>(0.0f, float(GetLevel() - spellProto->GetMaxLevel())) * basePointsPerLevel);
+                value += (std::max<float>(0.0f, float(GetLevel() - spellProto->MaxLevel)) * basePointsPerLevel);
             else if (spellEffect->Effect != SPELL_EFFECT_WEAPON_PERCENT_DAMAGE &&
                 spellEffect->Effect != SPELL_EFFECT_KNOCK_BACK &&
                 !IsControlledByPlayer())

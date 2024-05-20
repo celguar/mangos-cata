@@ -9374,11 +9374,11 @@ void ObjectMgr::LoadTrainers(char const* tableName, bool isTemplates)
         {
             if (trainerSpell.reqLevel)
             {
-                if (trainerSpell.reqLevel == learnSpellinfo->GetSpellLevel())
+                if (trainerSpell.reqLevel == learnSpellinfo->SpellLevel)
                     ERROR_DB_STRICT_LOG("Table `%s` (Entry: %u) has redundant reqlevel %u (=spell level) for spell %u", tableName, entry, trainerSpell.reqLevel, spell);
             }
             else
-                trainerSpell.reqLevel = learnSpellinfo->GetSpellLevel();
+                trainerSpell.reqLevel = learnSpellinfo->SpellLevel;
         }
 
         if (trainerSpell.conditionId)
