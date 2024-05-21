@@ -1858,14 +1858,6 @@ struct SpellRangeEntry
     //char*   ShortName;                                    // 23-38    m_displayNameShort_lang
 };
 
-// SpellReagents.dbc
-struct SpellReagentsEntry
-{
-    //uint32    Id;                                         // 0        m_ID
-    int32     Reagent[MAX_SPELL_REAGENTS];                  // 54-61    m_reagent
-    uint32    ReagentCount[MAX_SPELL_REAGENTS];             // 62-69    m_reagentCount
-};
-
 // SpellRuneCost.dbc
 struct SpellRuneCostEntry
 {
@@ -2014,11 +2006,15 @@ struct SpellEntry
     uint32 ManaPerSecondPerLevel;                           // 69       m_manaPerSecondPerLevel
     //uint32 PowerDisplayId;                                // 70       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
     float  ManaCostPercentageFloat;                         // 71       4.3.0
-    uint32 SpellReagentsId;                                 // 72       SpellReagents.dbc
-    uint32 SpellShapeshiftId;                               // 73       SpellShapeshift.dbc
-    uint32 SpellTargetRestrictionsId;                       // 74       SpellTargetRestrictions.dbc
-    uint32 SpellTotemsId;                                   // 75       SpellTotems.dbc
-    //uint32 ResearchProjectId;                             // 76       ResearchProject.dbc
+    
+    //uint32 SpellReagentsId;                                 // 72       SpellReagents.dbc
+    int32  Reagent[MAX_SPELL_REAGENTS];                     // 72-79    m_reagent
+    uint32 ReagentCount[MAX_SPELL_REAGENTS];                // 80-87    m_reagentCount
+
+    uint32 SpellShapeshiftId;                               // 88       SpellShapeshift.dbc
+    uint32 SpellTargetRestrictionsId;                       // 89       SpellTargetRestrictions.dbc
+    uint32 SpellTotemsId;                                   // 90       SpellTotems.dbc
+    //uint32 ResearchProjectId;                             // 91       ResearchProject.dbc
 
     // helpers
     int32 CalculateSimpleValue(SpellEffectIndex eff) const;
@@ -2027,7 +2023,6 @@ struct SpellEntry
     // struct access functions
     SpellCategoriesEntry const* GetSpellCategories() const;
     SpellEffectEntry const* GetSpellEffect(SpellEffectIndex eff) const;
-    SpellReagentsEntry const* GetSpellReagents() const;
     SpellScalingEntry const* GetSpellScaling() const;
     SpellShapeshiftEntry const* GetSpellShapeshift() const;
     SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;

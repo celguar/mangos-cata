@@ -253,10 +253,7 @@ uint32 PlayerbotAI::getSpellId(const char* args, bool master) const
             continue;
 
         bool isExactMatch = (name.length() == wnamepart.length()) ? true : false;
-        SpellReagentsEntry const* spellReagents = pSpellInfo->GetSpellReagents();
-        if (!spellReagents)
-            continue;
-        bool usesNoReagents = (spellReagents->Reagent[0] <= 0) ? true : false;
+        bool usesNoReagents = (pSpellInfo->Reagent[0] <= 0) ? true : false;
 
         // if we already found a spell
         bool useThisSpell = true;
@@ -319,10 +316,7 @@ uint32 PlayerbotAI::getPetSpellId(const char* args) const
             continue;
 
         bool isExactMatch = (name.length() == wnamepart.length()) ? true : false;
-        SpellReagentsEntry const* spellReagents = pSpellInfo->GetSpellReagents();
-        if (!spellReagents)
-            continue;
-        bool usesNoReagents = (spellReagents->Reagent[0] <= 0) ? true : false;
+        bool usesNoReagents = (pSpellInfo->Reagent[0] <= 0) ? true : false;
 
         // if we already found a spell
         bool useThisSpell = true;
@@ -5827,15 +5821,11 @@ bool PlayerbotAI::HasSpellReagents(uint32 spellId)
 
     for (uint32 i = 0; i < MAX_SPELL_REAGENTS; ++i)
     {
-        SpellReagentsEntry const* spellReagents = pSpellInfo->GetSpellReagents();
-        if (!spellReagents)
+        if (pSpellInfo->Reagent[i] <= 0)
             continue;
 
-        if (spellReagents->Reagent[i] <= 0)
-            continue;
-
-        uint32 itemid = spellReagents->Reagent[i];
-        uint32 count = spellReagents->ReagentCount[i];
+        uint32 itemid = pSpellInfo->Reagent[i];
+        uint32 count = pSpellInfo->ReagentCount[i];
 
         if (!m_bot->HasItemCount(itemid, count))
             return false;
@@ -5857,16 +5847,12 @@ uint32 PlayerbotAI::GetSpellCharges(uint32 spellId)
     std::list<uint32> chargeList;
     for (uint32 i = 0; i < MAX_SPELL_REAGENTS; ++i)
     {
-        SpellReagentsEntry const* spellReagents = pSpellInfo->GetSpellReagents();
-        if (!spellReagents)
-            continue;
-
-        if (spellReagents->Reagent[i] <= 0)
+        if (pSpellInfo->Reagent[i] <= 0)
             continue;
 
         uint32 totalcount = 0;
-        uint32 itemid = spellReagents->Reagent[i];
-        uint32 count = spellReagents->ReagentCount[i];
+        uint32 itemid = pSpellInfo->Reagent[i];
+        uint32 count = pSpellInfo->ReagentCount[i];
         ItemCountInInv(itemid, totalcount);
         chargeList.push_back((totalcount / count));
     }

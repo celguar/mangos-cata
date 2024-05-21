@@ -49,11 +49,6 @@ SpellEffectEntry const* SpellEntry::GetSpellEffect(SpellEffectIndex eff) const
     return GetSpellEffectEntry(Id, eff);
 }
 
-SpellReagentsEntry const* SpellEntry::GetSpellReagents() const
-{
-    return SpellReagentsId ? sSpellReagentsStore.LookupEntry(SpellReagentsId) : NULL;
-}
-
 SpellScalingEntry const* SpellEntry::GetSpellScaling() const
 {
     return SpellScalingId ? sSpellScalingStore.LookupEntry(SpellScalingId) : NULL;

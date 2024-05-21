@@ -5018,17 +5018,13 @@ void Spell::TakeReagents()
     if (p_caster->CanNoReagentCast(m_spellInfo))
         return;
 
-    SpellReagentsEntry const* spellReagents = m_spellInfo->GetSpellReagents();
-
     for(uint32 x = 0; x < MAX_SPELL_REAGENTS; ++x)
     {
-        if(!spellReagents)
-            continue;
-        if(spellReagents->Reagent[x] <= 0)
+        if(m_spellInfo->Reagent[x] <= 0)
             continue;
 
-        uint32 itemid = spellReagents->Reagent[x];
-        uint32 itemcount = spellReagents->ReagentCount[x];
+        uint32 itemid = m_spellInfo->Reagent[x];
+        uint32 itemcount = m_spellInfo->ReagentCount[x];
 
         // if CastItem is also spell reagent
         if (m_CastItem)
@@ -7130,14 +7126,7 @@ bool Spell::IgnoreItemRequirements() const
 
         /// Some triggered spells have same reagents that have master spell
         /// expected in test: master spell have reagents in first slot then triggered don't must use own
-        if (m_triggeredBySpellInfo)
-        {
-            SpellReagentsEntry const* spellReagents = m_triggeredBySpellInfo->GetSpellReagents();
-            if (!spellReagents || !spellReagents->Reagent[0])
-                return false;
-        }
-
-        return true;
+        return !(m_triggeredBySpellInfo && !m_triggeredBySpellInfo->Reagent[0]);
     }
 
     return false;
@@ -7262,39 +7251,35 @@ SpellCastResult Spell::CheckItems()
     {
         if (!p_caster->CanNoReagentCast(m_spellInfo))
         {
-            SpellReagentsEntry const* spellReagents = m_spellInfo->GetSpellReagents();
-            if(spellReagents)
+            for(uint32 i = 0; i < MAX_SPELL_REAGENTS; ++i)
             {
-                for(uint32 i = 0; i < MAX_SPELL_REAGENTS; ++i)
+                if(m_spellInfo->Reagent[i] <= 0)
+                    continue;
+
+                uint32 itemid    = m_spellInfo->Reagent[i];
+                uint32 itemcount = m_spellInfo->ReagentCount[i];
+                
+                // if CastItem is also spell reagent
+                if (m_CastItem && m_CastItem->GetEntry() == itemid)
                 {
-                    if(spellReagents->Reagent[i] <= 0)
-                        continue;
+                    ItemPrototype const* proto = m_CastItem->GetProto();
+                    if (!proto)
+                        return SPELL_FAILED_REAGENTS;
 
-                    uint32 itemid    = spellReagents->Reagent[i];
-                    uint32 itemcount = spellReagents->ReagentCount[i];
-
-                    // if CastItem is also spell reagent
-                    if (m_CastItem && m_CastItem->GetEntry() == itemid)
+                    for (int s = 0; s < MAX_ITEM_PROTO_SPELLS; ++s)
                     {
-                        ItemPrototype const* proto = m_CastItem->GetProto();
-                        if (!proto)
-                            return SPELL_FAILED_REAGENTS;
-
-                        for (int s = 0; s < MAX_ITEM_PROTO_SPELLS; ++s)
+                        // CastItem will be used up and does not count as reagent
+                        int32 charges = m_CastItem->GetSpellCharges(s);
+                        if (proto->Spells[s].SpellCharges < 0 && abs(charges) < 2)
                         {
-                            // CastItem will be used up and does not count as reagent
-                            int32 charges = m_CastItem->GetSpellCharges(s);
-                            if (proto->Spells[s].SpellCharges < 0 && abs(charges) < 2)
-                            {
-                                ++itemcount;
-                                break;
-                            }
+                            ++itemcount;
+                            break;
                         }
                     }
-
-                    if (!p_caster->HasItemCount(itemid, itemcount))
-                        return SPELL_FAILED_REAGENTS;
                 }
+                
+                if (!p_caster->HasItemCount(itemid, itemcount))
+                    return SPELL_FAILED_REAGENTS;
             }
         }
 

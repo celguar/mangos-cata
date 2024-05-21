@@ -3842,22 +3842,18 @@ bool SpellMgr::IsSpellValid(SpellEntry const* spellInfo, Player* pl, bool msg)
 
     if (need_check_reagents)
     {
-        SpellReagentsEntry const* spellReagents = spellInfo->GetSpellReagents();
-        if(spellReagents)
+        for(int j : spellInfo->Reagent)
         {
-            for(int j = 0; j < MAX_SPELL_REAGENTS; ++j)
+            if(j > 0 && !ObjectMgr::GetItemPrototype(j))
             {
-                if(spellReagents->Reagent[j] > 0 && !ObjectMgr::GetItemPrototype( spellReagents->Reagent[j] ))
+                if(msg)
                 {
-                    if(msg)
-                    {
-                        if(pl)
-                            ChatHandler(pl).PSendSysMessage("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.",spellInfo->Id,spellReagents->Reagent[j]);
-                        else
-                            sLog.outErrorDb("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.",spellInfo->Id,spellReagents->Reagent[j]);
-                    }
-                    return false;
+                    if(pl)
+                        ChatHandler(pl).PSendSysMessage("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.",spellInfo->Id, j);
+                    else
+                        sLog.outErrorDb("Craft spell %u requires reagent item (Entry: %u) but item does not exist in item_template.",spellInfo->Id, j);
                 }
+                return false;
             }
         }
     }
