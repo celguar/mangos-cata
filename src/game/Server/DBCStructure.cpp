@@ -54,11 +54,6 @@ SpellScalingEntry const* SpellEntry::GetSpellScaling() const
     return SpellScalingId ? sSpellScalingStore.LookupEntry(SpellScalingId) : NULL;
 }
 
-SpellShapeshiftEntry const* SpellEntry::GetSpellShapeshift() const
-{
-    return SpellShapeshiftId ? sSpellShapeshiftStore.LookupEntry(SpellShapeshiftId) : NULL;
-}
-
 SpellTargetRestrictionsEntry const* SpellEntry::GetSpellTargetRestrictions() const
 {
     return SpellTargetRestrictionsId ? sSpellTargetRestrictionsStore.LookupEntry(SpellTargetRestrictionsId) : NULL;
@@ -133,18 +128,6 @@ int32 SpellEntry::GetEffectMiscValue(SpellEffectIndex index) const
 {
     SpellEffectEntry const* effect = GetSpellEffect(index);
     return effect ? effect->EffectMiscValue : 0;
-}
-
-uint32 SpellEntry::GetStances() const
-{
-    SpellShapeshiftEntry const* ss = GetSpellShapeshift();
-    return ss ? ss->Stances : 0;
-}
-
-uint32 SpellEntry::GetStancesNot() const
-{
-    SpellShapeshiftEntry const* ss = GetSpellShapeshift();
-    return ss ? ss->StancesNot : 0;
 }
 
 uint32 SpellEntry::GetTargets() const
