@@ -5793,7 +5793,7 @@ bool Player::UpdateCraftSkill(uint32 spellid)
 
             // Alchemy Discoveries here
             SpellEntry const* spellEntry = sSpellTemplate.LookupEntry<SpellEntry>(spellid);
-            if (spellEntry && spellEntry->GetMechanic() == MECHANIC_DISCOVERY)
+            if (spellEntry && spellEntry->Mechanic == MECHANIC_DISCOVERY)
             {
                 if (uint32 discoveredSpell = GetSkillDiscoverySpell(skill->skillId, spellid, this))
                     learnSpell(discoveredSpell, false);
@@ -7970,7 +7970,7 @@ void Player::_HandleDeadlyPoison(Unit* Target, WeaponAttackType attType, SpellEn
                 continue;
 
             if (SpellEntry const* combatEntry = sSpellTemplate.LookupEntry<SpellEntry>(pSecondEnchant->spellid[s]))
-                if (combatEntry->GetDispel() == DISPEL_POISON)
+                if (combatEntry->Dispel == DISPEL_POISON)
                     CastSpell(Target, combatEntry, TRIGGERED_OLD_TRIGGERED, otherWeapon);
         }
     }
@@ -24412,7 +24412,7 @@ void Player::AddGCD(SpellEntry const& spellEntry, uint32 forcedDuration /*= 0*/,
 
 void Player::AddCooldown(SpellEntry const& spellEntry, ItemPrototype const* itemProto /*= nullptr*/, bool permanent /*= false*/, uint32 forcedDuration /*= 0*/)
 {
-    uint32 spellCategory = spellEntry.GetCategory();
+    uint32 spellCategory = spellEntry.Category;
     int32 recTime = spellEntry.RecoveryTime; // int because of spellmod calculations
     int32 categoryRecTime = spellEntry.CategoryRecoveryTime; // int because of spellmod calculations
     uint32 itemId = 0;

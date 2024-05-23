@@ -1717,7 +1717,7 @@ void Unit::CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 damage, S
     bool crit = RollSpellCritOutcome(pVictim, damageSchoolMask, spellInfo);
 
     // damage bonus (per damage class)
-    switch (spellInfo->GetDmgClass())
+    switch (spellInfo->DmgClass)
     {
         // Melee and Ranged Spells
         case SPELL_DAMAGE_CLASS_RANGED:
@@ -3117,7 +3117,7 @@ SpellMissInfo Unit::SpellHitResult(Unit* pVictim, SpellEntry const* spell, bool 
         if (pVictim->IsImmuneToDamage(schoolMask))
             return SPELL_MISS_IMMUNE;
     }
-    switch (spell->GetDmgClass())
+    switch (spell->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED:
@@ -3299,7 +3299,7 @@ bool Unit::CanReactOnAbility(const SpellEntry *ability) const
 bool Unit::CanDodgeAbility(const Unit *attacker, const SpellEntry *ability) const
 {
     // Can't dodge unavoidable and ranged attacks
-    if (!CanReactOnAbility(ability) || ability->GetDmgClass() != SPELL_DAMAGE_CLASS_MELEE)
+    if (!CanReactOnAbility(ability) || ability->DmgClass != SPELL_DAMAGE_CLASS_MELEE)
         return false;
     // Check if attacker can be dodged at the moment
     if (!CanDodgeInCombat(attacker))
@@ -3320,7 +3320,7 @@ bool Unit::CanParryAbility(const Unit *attacker, const SpellEntry *ability) cons
     if (!CanReactOnAbility(ability))
         return false;
     // Only physical melee attacks can be parried, deflect for magical and ranged
-    if (ability->GetDmgClass() != SPELL_DAMAGE_CLASS_MELEE || (GetSpellSchoolMask(ability) & SPELL_SCHOOL_MASK_MAGIC))
+    if (ability->DmgClass != SPELL_DAMAGE_CLASS_MELEE || (GetSpellSchoolMask(ability) & SPELL_SCHOOL_MASK_MAGIC))
         return false;
     // Only close range melee attacks can be parried, longer range abilities use deflect
     if (ability->rangeIndex != SPELL_RANGE_IDX_COMBAT && ability->rangeIndex != SPELL_RANGE_IDX_SELF_ONLY)
@@ -3344,7 +3344,7 @@ bool Unit::CanBlockAbility(const Unit *attacker, const SpellEntry *ability, bool
     if (!CanReactOnAbility(ability))
         return false;
     // Melee and ranged spells only
-    switch (ability->GetDmgClass())
+    switch (ability->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED:
@@ -3378,7 +3378,7 @@ bool Unit::CanDeflectAbility(const Unit *attacker, const SpellEntry *ability) co
     if (!CanReactOnAbility(ability))
         return false;
     // Only magical melee attacks, ranged attacks and spells can be deflected, parry for the rest
-    switch (ability->GetDmgClass())
+    switch (ability->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_RANGED:
         case SPELL_DAMAGE_CLASS_MAGIC:
@@ -3688,7 +3688,7 @@ uint32 Unit::CalculateGlanceAmount(CalcDamageInfo *meleeInfo) const
 
 float Unit::CalculateAbilityDeflectChance(const Unit *attacker, const SpellEntry *ability) const
 {
-    switch (ability->GetDmgClass())
+    switch (ability->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED: return CalculateEffectiveParryChance(attacker, GetWeaponAttackType(ability), ability);
@@ -3749,7 +3749,7 @@ bool Unit::CanCrit(const SpellEntry *entry, SpellSchoolMask schoolMask, WeaponAt
         return true;
     if (!IsSpellAbleToCrit(entry))
         return false;
-    switch (entry->GetDmgClass())
+    switch (entry->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED: return CanCrit(attType);
@@ -3802,7 +3802,7 @@ float Unit::GetCritChance(const SpellEntry *entry, SpellSchoolMask schoolMask) c
         return 0.0f;
 
     // Add own hit chance
-    switch (entry->GetDmgClass())
+    switch (entry->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MAGIC:
             chance += GetCritChance(schoolMask);
@@ -3853,7 +3853,7 @@ float Unit::GetCritMultiplier(SpellSchoolMask dmgSchoolMask, uint32 creatureType
     // Default crit multiplier for spells: 1.5x
     if (spell)
     {
-        switch (spell->GetDmgClass())
+        switch (spell->DmgClass)
         {
             case SPELL_DAMAGE_CLASS_NONE:
             case SPELL_DAMAGE_CLASS_MAGIC:
@@ -3945,7 +3945,7 @@ uint32 Unit::CalculateCritAmount(const Unit *victim, uint32 amount, const SpellE
     const SpellSchoolMask schoolMask = GetSpellSchoolMask(entry);
     const uint32 creatureTypeMask = (victim ? victim->GetCreatureTypeMask() : 0);
     const float multiplier = GetCritMultiplier(schoolMask, creatureTypeMask, entry, heal);
-    const SpellDmgClass dmgClass = SpellDmgClass(entry->GetDmgClass());
+    const SpellDmgClass dmgClass = SpellDmgClass(entry->DmgClass);
     const float ignoreReduction = (heal ? 0.0f : GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_IGNORE_DAMAGE_REDUCTION_SCHOOL, schoolMask));
     const float taken = (victim ? victim->GetCritTakenMultiplier(schoolMask, dmgClass, ignoreReduction, heal) : 1.0f);
     const uint32 outgoing = uint32(amount * multiplier);
@@ -4002,7 +4002,7 @@ float Unit::GetHitChance(const SpellEntry *entry, SpellSchoolMask schoolMask) co
         return 0.0f;
 
     // Add own hit chance
-    switch (entry->GetDmgClass())
+    switch (entry->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MAGIC:
             chance += GetHitChance(schoolMask);
@@ -4052,7 +4052,7 @@ float Unit::GetMissChance(const SpellEntry *entry, SpellSchoolMask schoolMask) c
         return 0.0f;
 
     // Add own miss chance
-    switch (entry->GetDmgClass())
+    switch (entry->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED:
@@ -4183,7 +4183,7 @@ float Unit::CalculateSpellCritChance(const Unit *victim, SpellSchoolMask schoolM
 
     float chance = 0.0f;
 
-    switch (spell->GetDmgClass())
+    switch (spell->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED:
@@ -4195,7 +4195,7 @@ float Unit::CalculateSpellCritChance(const Unit *victim, SpellSchoolMask schoolM
         return 0.0f;
     // Modify by victim in case of hostile hit
     if (!IsPositiveSpell(spell, this, victim))
-        chance += victim->GetCritTakenChance(schoolMask, SpellDmgClass(spell->GetDmgClass()));
+        chance += victim->GetCritTakenChance(schoolMask, SpellDmgClass(spell->DmgClass));
     // TODO: Scripted crit chance auras: class script auras need to be orgnaized and re-implemented in the future as a part of scripting system
     const AuraList &scripts = GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
     for (AuraList::const_iterator i = scripts.begin(); i != scripts.end(); ++i)
@@ -4283,7 +4283,7 @@ float Unit::CalculateSpellCritChance(const Unit *victim, SpellSchoolMask schoolM
                     chance += aura->GetModifier()->m_amount;
             }
             // Exorcism
-            else if (spell->GetCategory() == 19)
+            else if (spell->Category == 19)
             {
                 if (victim->GetCreatureTypeMask() & CREATURE_TYPEMASK_DEMON_OR_UNDEAD)
                     return 100.0f;
@@ -4310,7 +4310,7 @@ float Unit::CalculateSpellMissChance(const Unit *victim, SpellSchoolMask schoolM
     float chance = 0.0f;
     const float minimum = 0.0f; // WotLK: no unavoidable miss chance
 
-    switch (spell->GetDmgClass())
+    switch (spell->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED:
@@ -4434,7 +4434,7 @@ float Unit::CalculateSpellResistChance(const Unit *victim, SpellSchoolMask schoo
     float chance = 0.0f;
 
     // Chance to fully resist a spell by magic resistance
-    if (spell->GetDmgClass() == SPELL_DAMAGE_CLASS_MAGIC && !spell->HasAttribute(SPELL_ATTR_EX4_IGNORE_RESISTANCES))
+    if (spell->DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !spell->HasAttribute(SPELL_ATTR_EX4_IGNORE_RESISTANCES))
     {
         const bool binary = IsBinarySpell(spell);
         const float percent = victim->CalculateEffectiveMagicResistancePercent(this, schoolMask, binary);
@@ -4444,10 +4444,10 @@ float Unit::CalculateSpellResistChance(const Unit *victim, SpellSchoolMask schoo
             chance += float(SPELL_PARTIAL_RESIST_DISTRIBUTION.at(uint32(percent * 100)).at(SPELL_PARTIAL_RESIST_PCT_100)) * 0.01f;
     }
     // Chance to fully resist entire spell by it's dispel type
-    if (const int32 type = int32(spell->GetDispel()))
+    if (const int32 type = int32(spell->Dispel))
         chance += victim->GetTotalAuraModifierByMiscValue(SPELL_AURA_178, type);
     // Chance to fully resist entire spell by it's mechanic
-    if (const int32 mechanic = int32(spell->GetMechanic()))
+    if (const int32 mechanic = int32(spell->Mechanic))
         chance += victim->GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_MECHANIC_RESISTANCE, mechanic);
 
     // TODO: Move it in the future, effect mechanic resist must be processed differently
@@ -5646,7 +5646,7 @@ void Unit::RemoveAurasWithDispelType(DispelType type, ObjectGuid casterGuid)
     for (SpellAuraHolderMap::iterator itr = auras.begin(); itr != auras.end();)
     {
         SpellEntry const* spell = itr->second->GetSpellProto();
-        if (((1<<spell->GetDispel()) & dispelMask) && (!casterGuid || casterGuid == itr->second->GetCasterGuid()))
+        if (((1<<spell->Dispel) & dispelMask) && (!casterGuid || casterGuid == itr->second->GetCasterGuid()))
         {
             // Dispel aura
             RemoveAurasDueToSpell(spell->Id);
@@ -7473,7 +7473,7 @@ Unit* Unit::SelectMagnetTarget(Unit* victim, Spell* spell, SpellEffectIndex eff)
         return nullptr;
 
     // Magic case
-    if (spell && (spell->m_spellInfo->GetDmgClass() == SPELL_DAMAGE_CLASS_NONE || spell->m_spellInfo->GetDmgClass() == SPELL_DAMAGE_CLASS_MAGIC))
+    if (spell && (spell->m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_NONE || spell->m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC))
     {
         if (spell->m_spellInfo->HasAttribute(SPELL_ATTR_ABILITY) || spell->m_spellInfo->HasAttribute(SPELL_ATTR_EX_CANT_BE_REDIRECTED) || spell->m_spellInfo->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY))
             return nullptr;
@@ -7891,7 +7891,7 @@ uint32 Unit::SpellDamageBonusDone(Unit* pVictim, SpellEntry const* spellProto, u
                 Unit::SpellAuraHolderMap const& auras = pVictim->GetSpellAuraHolderMap();
                 for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
                 {
-                    if(itr->second->GetSpellProto()->GetDispel() == DISPEL_DISEASE)
+                    if(itr->second->GetSpellProto()->Dispel == DISPEL_DISEASE)
                     {
                         found = true;
                         break;
@@ -8113,7 +8113,7 @@ uint32 Unit::SpellHealingBonusDone(Unit* pVictim, SpellEntry const* spellProto, 
             return owner->SpellHealingBonusDone(pVictim, spellProto, healamount, damagetype, stack);
 
     // No heal amount for this class spells
-    if (spellProto->GetDmgClass() == SPELL_DAMAGE_CLASS_NONE)
+    if (spellProto->DmgClass == SPELL_DAMAGE_CLASS_NONE)
         return healamount < 0 ? 0 : healamount;
 
     // Healing Done
@@ -8261,7 +8261,7 @@ uint32 Unit::SpellHealingBonusTaken(Unit* pCaster, SpellEntry const* spellProto,
         TakenTotalMod *= (100.0f + maxval) / 100.0f;
 
     // No heal amount for this class spells
-    if (spellProto->GetDmgClass() == SPELL_DAMAGE_CLASS_NONE)
+    if (spellProto->DmgClass == SPELL_DAMAGE_CLASS_NONE)
     {
         healamount = int32(healamount * TakenTotalMod);
         return healamount < 0 ? 0 : healamount;
@@ -8381,7 +8381,7 @@ bool Unit::IsImmuneToSpell(SpellEntry const* spellInfo, bool /*castOnSelf*/)
 
     SpellImmuneList const& dispelList = m_spellImmune[IMMUNITY_DISPEL];
     for(SpellImmuneList::const_iterator itr = dispelList.begin(); itr != dispelList.end(); ++itr)
-        if (itr->type == spellInfo->GetDispel())
+        if (itr->type == spellInfo->Dispel)
             return true;
 
     if (!spellInfo->HasAttribute(SPELL_ATTR_EX_UNAFFECTED_BY_SCHOOL_IMMUNE) &&          // unaffected by school immunity
@@ -8394,7 +8394,7 @@ bool Unit::IsImmuneToSpell(SpellEntry const* spellInfo, bool /*castOnSelf*/)
                 return true;
     }
 
-    if(uint32 mechanic = spellInfo->GetMechanic())
+    if(uint32 mechanic = spellInfo->Mechanic)
     {
         SpellImmuneList const& mechanicList = m_spellImmune[IMMUNITY_MECHANIC];
         for (SpellImmuneList::const_iterator itr = mechanicList.begin(); itr != mechanicList.end(); ++itr)
@@ -8446,7 +8446,7 @@ bool Unit::IsImmuneToSpellEffect(SpellEntry const* spellInfo, SpellEffectIndex i
         // Check for immune to application of harmful magical effects
         AuraList const& immuneAuraApply = GetAurasByType(SPELL_AURA_MOD_IMMUNE_AURA_APPLY_SCHOOL);
         if (!immuneAuraApply.empty() &&
-            spellInfo->GetDispel() == DISPEL_MAGIC &&       // Magic debuff)
+            spellInfo->Dispel == DISPEL_MAGIC &&       // Magic debuff)
             !IsPositiveEffect(spellInfo, index))            // Harmful
         {
             // Check school
@@ -8647,7 +8647,7 @@ uint32 Unit::MeleeDamageBonusDone(Unit* pVictim, uint32 pdamage, WeaponAttackTyp
             Unit::SpellAuraHolderMap const& auras = pVictim->GetSpellAuraHolderMap();
             for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
             {
-                if(itr->second->GetSpellProto()->GetDispel() == DISPEL_DISEASE)
+                if(itr->second->GetSpellProto()->Dispel == DISPEL_DISEASE)
                 {
                     found = true;
                     break;
@@ -10517,8 +10517,8 @@ int32 Unit::CalculateAuraDuration(SpellEntry const* spellProto, uint32 effectMas
 
     if (!IsPositiveSpell(spellProto))
     {
-        dispelMod   = GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_DURATION_OF_EFFECTS_BY_DISPEL, spellProto->GetDispel());
-        dmgClassMod = GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_DURATION_OF_MAGIC_EFFECTS, spellProto->GetDmgClass());
+        dispelMod   = GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_DURATION_OF_EFFECTS_BY_DISPEL, spellProto->Dispel);
+        dmgClassMod = GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_DURATION_OF_MAGIC_EFFECTS, spellProto->DmgClass);
     }
 
     int32 durationMod = std::min(mechanicMod, std::min(dispelMod, dmgClassMod));

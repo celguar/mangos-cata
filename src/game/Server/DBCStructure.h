@@ -1730,18 +1730,6 @@ struct SpellCastTimesEntry
     int32     MinCastTime;                                  // 3        m_minimum
 };
 
-// SpellCategories.dbc
-struct SpellCategoriesEntry
-{
-    //uint32    Id;                                         // 0        m_ID
-    uint32    Category;                                     // 1        m_category
-    uint32    DmgClass;                                     // 2        m_defenseType
-    uint32    Dispel;                                       // 3        m_dispelType
-    uint32    Mechanic;                                     // 4        m_mechanic
-    uint32    PreventionType;                               // 5        m_preventionType
-    uint32    StartRecoveryCategory;                        // 6        m_startRecoveryCategory
-};
-
 // SpellDifficulty.dbc
 struct SpellDifficultyEntry
 {
@@ -1974,53 +1962,51 @@ struct SpellEntry
     uint32 FacingCasterFlags;                               // 46       m_facingCasterFlags
     int32  AreaGroupId;                                     // 47       m_requiredAreaGroupId
     uint32 RequiresSpellFocus;                              // 48       m_requiresSpellFocus
-    uint32 SpellCategoriesId;                               // 49       SpellCategories.dbc
-    uint32    SpellFamilyName;                              // 50       m_spellClassSet
-    ClassFamilyMask SpellFamilyFlags;                       // 51-53    m_spellClassMask NOTE: size is 12 bytes!!!
-    uint32  CategoryRecoveryTime;                           // 54       m_categoryRecoveryTime
-    uint32  RecoveryTime;                                   // 55       m_recoveryTime
-    uint32  StartRecoveryTime;                              // 56       m_startRecoveryTime
-    //uint32 unkIndex7;                                     // 57       unk2, all zeros...
-    int32  EquippedItemClass;                               // 58       m_equippedItemClass (value)
-    int32  EquippedItemInventoryTypeMask;                   // 59       m_equippedItemInvTypes (mask)
-    int32  EquippedItemSubClassMask;                        // 60       m_equippedItemSubclass (mask)
-    uint32 AuraInterruptFlags;                              // 61       m_auraInterruptFlags
-    uint32 ChannelInterruptFlags;                           // 62       m_channelInterruptFlags
-    uint32 InterruptFlags;                                  // 63       m_interruptFlags
-    uint32 BaseLevel;                                       // 64       m_baseLevel
-    uint32 MaxLevel;                                        // 65       m_maxLevel
-    uint32 SpellLevel;                                      // 66       m_spellLevel
-    uint32 ManaCost;                                        // 67       m_manaCost
-    uint32 ManaCostPerlevel;                                // 68       m_manaCostPerLevel
-    uint32 ManaCostPercentage;                              // 69       m_manaCostPct
-    uint32 ManaPerSecond;                                   // 70       m_manaPerSecond
-    uint32 ManaPerSecondPerLevel;                           // 71       m_manaPerSecondPerLevel
-    //uint32 PowerDisplayId;                                // 72       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
-    float  ManaCostPercentageFloat;                         // 73       4.3.0
-    int32  Reagent[MAX_SPELL_REAGENTS];                     // 74-81    m_reagent
-    uint32 ReagentCount[MAX_SPELL_REAGENTS];                // 82-89    m_reagentCount
-    uint32 SpellTargetRestrictionsId;                       // 90       SpellTargetRestrictions.dbc
-    uint32 SpellTotemsId;                                   // 91       SpellTotems.dbc
-    //uint32 ResearchProjectId;                             // 92       ResearchProject.dbc
+    uint32 Category;                                        // 49        m_category
+    uint32 DmgClass;                                        // 50        m_defenseType
+    uint32 Dispel;                                          // 51        m_dispelType
+    uint32 Mechanic;                                        // 52        m_mechanic
+    uint32 PreventionType;                                  // 53        m_preventionType
+    uint32 StartRecoveryCategory;                           // 54        m_startRecoveryCategory
+    uint32    SpellFamilyName;                              // 55       m_spellClassSet
+    ClassFamilyMask SpellFamilyFlags;                       // 56-58    m_spellClassMask NOTE: size is 12 bytes!!!
+    uint32  CategoryRecoveryTime;                           // 59       m_categoryRecoveryTime
+    uint32  RecoveryTime;                                   // 60       m_recoveryTime
+    uint32  StartRecoveryTime;                              // 61       m_startRecoveryTime
+    //uint32 unkIndex7;                                     // 62       unk2, all zeros...
+    int32  EquippedItemClass;                               // 63       m_equippedItemClass (value)
+    int32  EquippedItemInventoryTypeMask;                   // 64       m_equippedItemInvTypes (mask)
+    int32  EquippedItemSubClassMask;                        // 65       m_equippedItemSubclass (mask)
+    uint32 AuraInterruptFlags;                              // 66       m_auraInterruptFlags
+    uint32 ChannelInterruptFlags;                           // 67       m_channelInterruptFlags
+    uint32 InterruptFlags;                                  // 68       m_interruptFlags
+    uint32 BaseLevel;                                       // 69       m_baseLevel
+    uint32 MaxLevel;                                        // 70       m_maxLevel
+    uint32 SpellLevel;                                      // 71       m_spellLevel
+    uint32 ManaCost;                                        // 72       m_manaCost
+    uint32 ManaCostPerlevel;                                // 73       m_manaCostPerLevel
+    uint32 ManaCostPercentage;                              // 74       m_manaCostPct
+    uint32 ManaPerSecond;                                   // 75       m_manaPerSecond
+    uint32 ManaPerSecondPerLevel;                           // 76       m_manaPerSecondPerLevel
+    //uint32 PowerDisplayId;                                // 77       m_powerDisplayID - id from PowerDisplay.dbc, new in 3.1
+    float  ManaCostPercentageFloat;                         // 78       4.3.0
+    int32  Reagent[MAX_SPELL_REAGENTS];                     // 79-86    m_reagent
+    uint32 ReagentCount[MAX_SPELL_REAGENTS];                // 87-94    m_reagentCount
+    uint32 SpellTargetRestrictionsId;                       // 95       SpellTargetRestrictions.dbc
+    uint32 SpellTotemsId;                                   // 96       SpellTotems.dbc
+    //uint32 ResearchProjectId;                             // 97       ResearchProject.dbc
 
     // helpers
     int32 CalculateSimpleValue(SpellEffectIndex eff) const;
     ClassFamilyMask const& GetEffectSpellClassMask(SpellEffectIndex eff) const;
 
     // struct access functions
-    SpellCategoriesEntry const* GetSpellCategories() const;
     SpellEffectEntry const* GetSpellEffect(SpellEffectIndex eff) const;
     SpellScalingEntry const* GetSpellScaling() const;
     SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
     SpellTotemsEntry const* GetSpellTotems() const;
 
     // single fields
-    uint32 GetPreventionType() const;
-    uint32 GetCategory() const;
-    uint32 GetMechanic() const;
-    uint32 GetStartRecoveryCategory() const;
-    uint32 GetDmgClass() const;
-    uint32 GetDispel() const;
     uint32 GetMaxAffectedTargets() const;
     uint32 GetSpellEffectIdByIndex(SpellEffectIndex index) const;
     uint32 GetEffectImplicitTargetAByIndex(SpellEffectIndex index) const;

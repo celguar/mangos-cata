@@ -346,7 +346,7 @@ WeaponAttackType GetWeaponAttackType(SpellEntry const* spellInfo)
     if (!spellInfo)
         return BASE_ATTACK;
 
-    switch (spellInfo->GetDmgClass())
+    switch (spellInfo->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
         {
@@ -509,7 +509,7 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
         case SPELLFAMILY_WARLOCK:
         {
             // only warlock curses have this
-            if (spellInfo->GetDispel() == DISPEL_CURSE)
+            if (spellInfo->Dispel == DISPEL_CURSE)
                 return SPELL_CURSE;
 
             // Warlock (Demon Armor | Demon Skin | Fel Armor)
@@ -534,7 +534,7 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
         case SPELLFAMILY_HUNTER:
         {
             // only hunter stings have this
-            if (spellInfo->GetDispel() == DISPEL_POISON)
+            if (spellInfo->Dispel == DISPEL_POISON)
                 return SPELL_STING;
 
             // only hunter aspects have this
@@ -576,7 +576,7 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
             return sSpellMgr.GetSpellElixirSpecific(spellInfo->Id);
 
         case SPELLFAMILY_DEATHKNIGHT:
-            if (spellInfo->GetCategory() == 47)
+            if (spellInfo->Category == 47)
                 return SPELL_PRESENCE;
             break;
     }
@@ -2424,8 +2424,8 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 
                 // Sprint & Sprint (waterwalk)
                 if (spellInfo_1->SpellIconID == 516 && spellInfo_2->SpellIconID == 516 &&
-                    ((spellInfo_1->GetCategory() == 44 && spellInfo_2->GetCategory() == 0) ||
-                    (spellInfo_2->GetCategory() == 44 && spellInfo_1->GetCategory() == 0)))
+                    ((spellInfo_1->Category == 44 && spellInfo_2->Category == 0) ||
+                    (spellInfo_2->Category == 44 && spellInfo_1->Category == 0)))
                     return false;
             }
 
@@ -4399,9 +4399,9 @@ void SpellMgr::CheckUsedSpells(char const* table)
                 continue;
             }
 
-            if(category >= 0 && spellEntry->GetCategory() != uint32(category))
+            if(category >= 0 && spellEntry->Category != uint32(category))
             {
-                sLog.outError("Spell %u '%s' category(%u) <> %u but used in %s.",spell,name.c_str(),spellEntry->GetCategory(),category,code.c_str());
+                sLog.outError("Spell %u '%s' category(%u) <> %u but used in %s.",spell,name.c_str(),spellEntry->Category,category,code.c_str());
                 continue;
             }
 
@@ -4470,7 +4470,7 @@ void SpellMgr::CheckUsedSpells(char const* table)
                 if (spellVisual >= 0 && spellEntry->SpellVisual[0] != uint32(spellVisual))
                     continue;
 
-                if(category >= 0 && spellEntry->GetCategory() != uint32(category))
+                if(category >= 0 && spellEntry->Category != uint32(category))
                     continue;
 
                 if (effectIdx >= 0)
@@ -4523,7 +4523,7 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellEntry const* spellproto
     {
         case SPELLFAMILY_GENERIC:
             // some generic arena related spells have by some strange reason MECHANIC_TURN
-            if  (spellproto->GetMechanic() == MECHANIC_TURN)
+            if  (spellproto->Mechanic == MECHANIC_TURN)
                 return DIMINISHING_NONE;
             break;
         case SPELLFAMILY_MAGE:

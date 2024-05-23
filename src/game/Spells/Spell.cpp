@@ -909,7 +909,7 @@ void Spell::prepareDataForTriggerSystem()
     }
 
     // Get data for type of attack and fill base info for trigger
-    switch (m_spellInfo->GetDmgClass())
+    switch (m_spellInfo->DmgClass)
     {
         case SPELL_DAMAGE_CLASS_MELEE:
             m_procAttacker = PROC_FLAG_SUCCESSFUL_MELEE_SPELL_HIT;
@@ -933,7 +933,7 @@ void Spell::prepareDataForTriggerSystem()
         default:
             if (IsPositiveSpell(m_spellInfo->Id))           // Check for positive spell
             {
-                if (m_spellInfo->GetDmgClass() & SPELL_DAMAGE_CLASS_NONE) // if dmg class none
+                if (m_spellInfo->DmgClass & SPELL_DAMAGE_CLASS_NONE) // if dmg class none
                 {
                     m_procAttacker = PROC_FLAG_DONE_SPELL_NONE_DMG_CLASS_POS;
                     m_procVictim = PROC_FLAG_TAKEN_SPELL_NONE_DMG_CLASS_POS;
@@ -951,7 +951,7 @@ void Spell::prepareDataForTriggerSystem()
             }
             else                                           // Negative spell
             {
-                if (m_spellInfo->GetDmgClass() & SPELL_DAMAGE_CLASS_NONE) // if dmg class none
+                if (m_spellInfo->DmgClass & SPELL_DAMAGE_CLASS_NONE) // if dmg class none
                 {
                     m_procAttacker = PROC_FLAG_DONE_SPELL_NONE_DMG_CLASS_NEG;
                     m_procVictim = PROC_FLAG_TAKEN_SPELL_NONE_DMG_CLASS_NEG;
@@ -1340,7 +1340,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
             Unit::SpellAuraHolderMap const& auras = unitTarget->GetSpellAuraHolderMap();
             for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
             {
-                if(itr->second->GetSpellProto()->GetDispel() == DISPEL_DISEASE &&
+                if(itr->second->GetSpellProto()->Dispel == DISPEL_DISEASE &&
                     itr->second->GetCasterGuid() == caster->GetObjectGuid())
                     ++count;
             }
@@ -1972,7 +1972,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 unMaxTargets = EffectChainTarget;
 
                 float max_range;
-                if(m_spellInfo->GetDmgClass() == SPELL_DAMAGE_CLASS_MELEE)
+                if(m_spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MELEE)
                     max_range = radius;
                 else
                     // FIXME: This very like horrible hack and wrong for most spells
@@ -3467,7 +3467,7 @@ void Spell::cast(bool skipCheck)
         case SPELLFAMILY_GENERIC:
         {
             // Bandages
-            if (m_spellInfo->GetMechanic() == MECHANIC_BANDAGE)
+            if (m_spellInfo->Mechanic == MECHANIC_BANDAGE)
                 AddPrecastSpell(11196);                     // Recently Bandaged
             // Stoneskin
             else if (m_spellInfo->Id == 20594)
@@ -3516,7 +3516,7 @@ void Spell::cast(bool skipCheck)
         case SPELLFAMILY_WARRIOR:
         {
             // Shield Slam
-            if ((m_spellInfo->SpellFamilyFlags & uint64(0x0000020000000000)) && m_spellInfo->GetCategory()==1209)
+            if ((m_spellInfo->SpellFamilyFlags & uint64(0x0000020000000000)) && m_spellInfo->Category==1209)
             {
                 if (m_caster->HasAura(58375))               // Glyph of Blocking
                     AddTriggeredSpell(58374);               // Glyph of Blocking
@@ -3538,7 +3538,7 @@ void Spell::cast(bool skipCheck)
         case SPELLFAMILY_PRIEST:
         {
             // Power Word: Shield
-            if (m_spellInfo->GetMechanic() == MECHANIC_SHIELD &&
+            if (m_spellInfo->Mechanic == MECHANIC_SHIELD &&
                 (m_spellInfo->SpellFamilyFlags & uint64(0x0000000000000001)))
                 AddPrecastSpell(6788);                      // Weakened Soul
             // Prayer of Mending (jump animation), we need formal caster instead original for correct animation
@@ -6788,9 +6788,9 @@ SpellCastResult Spell::CheckCasterAuras() const
         prevented_reason = SPELL_FAILED_CONFUSED;
     else if (unitflag & UNIT_FLAG_FLEEING && !m_spellInfo->HasAttribute(SPELL_ATTR_EX5_USABLE_WHILE_FEARED))
         prevented_reason = SPELL_FAILED_FLEEING;
-    else if (unitflag & UNIT_FLAG_SILENCED && m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE)
+    else if (unitflag & UNIT_FLAG_SILENCED && m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)
         prevented_reason = SPELL_FAILED_SILENCED;
-    else if (unitflag & UNIT_FLAG_PACIFIED && m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_PACIFY)
+    else if (unitflag & UNIT_FLAG_PACIFIED && m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_PACIFY)
         prevented_reason = SPELL_FAILED_PACIFIED;
     else if (m_caster->HasAuraType(SPELL_AURA_ALLOW_ONLY_ABILITY))
     {
@@ -6819,7 +6819,7 @@ SpellCastResult Spell::CheckCasterAuras() const
 
                 if ((GetSpellSchoolMask(pEntry) & school_immune) && !pEntry->HasAttribute(SPELL_ATTR_EX_UNAFFECTED_BY_SCHOOL_IMMUNE))
                     continue;
-                if ((1<<(pEntry->GetDispel())) & dispel_immune)
+                if ((1<<(pEntry->Dispel)) & dispel_immune)
                     continue;
 
                 for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
@@ -6849,9 +6849,9 @@ SpellCastResult Spell::CheckCasterAuras() const
                         case SPELL_AURA_MOD_SILENCE:
                         case SPELL_AURA_MOD_PACIFY:
                         case SPELL_AURA_MOD_PACIFY_SILENCE:
-                            if( m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_PACIFY)
+                            if( m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_PACIFY)
                                 return SPELL_FAILED_PACIFIED;
-                            else if ( m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE)
+                            else if ( m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)
                                 return SPELL_FAILED_SILENCED;
                             break;
                         default: break;
@@ -7634,7 +7634,7 @@ bool Spell::CheckTargetCreatureType(Unit* target) const
     uint32 spellCreatureTargetMask = m_spellInfo->GetTargetCreatureType();
 
     // Curse of Doom: not find another way to fix spell target check :/
-    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->GetCategory() == 1179)
+    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->Category == 1179)
     {
         // not allow cast at player
         if (target->GetTypeId() == TYPEID_PLAYER)

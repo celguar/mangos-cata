@@ -588,7 +588,7 @@ Player* PlayerbotClassAI::GetDispelTarget(DispelType dispelType, JOB_TYPE type, 
                     if (dispelType == DISPEL_MAGIC && holder->IsPositive())
                         continue;
                     // poison, disease and curse are always negative: return everyone
-                    if ((1 << holder->GetSpellProto()->GetDispel()) & dispelMask)
+                    if ((1 << holder->GetSpellProto()->Dispel) & dispelMask)
                         targets.push_back( heal_priority(groupMember, 0, job) );
                 }
             }

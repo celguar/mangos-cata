@@ -2321,14 +2321,14 @@ void WorldObject::AddGCD(SpellEntry const& spellEntry, uint32 forcedDuration /*=
     if (!gcdRecTime)
         return;
 
-    m_GCDCatMap.emplace(spellEntry.GetStartRecoveryCategory(), std::chrono::milliseconds(gcdRecTime) + GetMap()->GetCurrentClockTime());
+    m_GCDCatMap.emplace(spellEntry.StartRecoveryCategory, std::chrono::milliseconds(gcdRecTime) + GetMap()->GetCurrentClockTime());
 }
 
 bool WorldObject::HaveGCD(SpellEntry const* spellEntry) const
 {
     if (spellEntry)
     {
-        auto gcdItr = m_GCDCatMap.find(spellEntry->GetStartRecoveryCategory());
+        auto gcdItr = m_GCDCatMap.find(spellEntry->StartRecoveryCategory);
         if (gcdItr != m_GCDCatMap.end())
             return true;
         return false;
@@ -2340,7 +2340,7 @@ bool WorldObject::HaveGCD(SpellEntry const* spellEntry) const
 void WorldObject::AddCooldown(SpellEntry const& spellEntry, ItemPrototype const* itemProto /*= nullptr*/, bool permanent /*= false*/, uint32 forcedDuration /*= 0*/)
 {
     uint32 recTimeDuration = forcedDuration ? forcedDuration : spellEntry.RecoveryTime;
-    m_cooldownMap.AddCooldown(GetMap()->GetCurrentClockTime(), spellEntry.Id, recTimeDuration, spellEntry.GetCategory(), spellEntry.CategoryRecoveryTime);
+    m_cooldownMap.AddCooldown(GetMap()->GetCurrentClockTime(), spellEntry.Id, recTimeDuration, spellEntry.Category, spellEntry.CategoryRecoveryTime);
 }
 
 void WorldObject::UpdateCooldowns(TimePoint const& now)
@@ -2410,7 +2410,7 @@ bool WorldObject::GetExpireTime(SpellEntry const& spellEntry, TimePoint& expireT
 
 bool WorldObject::IsSpellReady(SpellEntry const& spellEntry, ItemPrototype const* itemProto /*= nullptr*/) const
 {
-    uint32 spellCategory = spellEntry.GetCategory();
+    uint32 spellCategory = spellEntry.Category;
 
     // overwrite category by provided category in item prototype during item cast if need
     if (itemProto)
@@ -2431,7 +2431,7 @@ bool WorldObject::IsSpellReady(SpellEntry const& spellEntry, ItemPrototype const
     if (spellCategory && m_cooldownMap.FindByCategory(spellCategory) != m_cooldownMap.end())
         return false;
 
-    if (spellEntry.GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE && CheckLockout(GetSpellSchoolMask(&spellEntry)))
+    if (spellEntry.PreventionType == SPELL_PREVENTION_TYPE_SILENCE && CheckLockout(GetSpellSchoolMask(&spellEntry)))
         return false;
 
     return true;
@@ -2482,7 +2482,7 @@ void WorldObject::ResetGCD(SpellEntry const* spellEntry /*= nullptr*/)
         return;
     }
 
-    auto gcdItr = m_GCDCatMap.find(spellEntry->GetStartRecoveryCategory());
+    auto gcdItr = m_GCDCatMap.find(spellEntry->StartRecoveryCategory);
     if (gcdItr != m_GCDCatMap.end())
         m_GCDCatMap.erase(gcdItr);
 }

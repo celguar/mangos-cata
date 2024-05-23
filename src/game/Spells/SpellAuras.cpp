@@ -3693,7 +3693,7 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
                 // If spell that caused this aura has Croud Control or Daze effect
                 if ((aurMechMask & MECHANIC_NOT_REMOVED_BY_SHAPESHIFT) ||
                     // some Daze spells have these parameters instead of MECHANIC_DAZE (skip snare spells)
-                    (aurSpellInfo->SpellIconID == 15 && aurSpellInfo->GetDispel() == 0 &&
+                    (aurSpellInfo->SpellIconID == 15 && aurSpellInfo->Dispel == 0 &&
                     (aurMechMask & (1 << (MECHANIC_SNARE-1))) == 0))
                 {
                     ++iter;
@@ -4877,7 +4877,7 @@ void Aura::HandleAuraModSilence(bool apply, bool Real)
         // Stop cast only spells vs PreventionType == SPELL_PREVENTION_TYPE_SILENCE
         for (uint32 i = CURRENT_MELEE_SPELL; i < CURRENT_MAX_SPELL; ++i)
             if (Spell* spell = target->GetCurrentSpell(CurrentSpellTypes(i)))
-                if(spell->m_spellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE)
+                if(spell->m_spellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE)
                     // Stop spells on prepare or casting state
                     target->InterruptSpell(CurrentSpellTypes(i), false);
     }
@@ -5279,7 +5279,7 @@ void Aura::HandleAuraModSchoolImmunity(bool apply, bool Real)
             }
         }
     }
-    if( Real && GetSpellProto()->GetMechanic() == MECHANIC_BANISH )
+    if( Real && GetSpellProto()->Mechanic == MECHANIC_BANISH )
     {
         if (apply)
             target->addUnitState(UNIT_STAT_ISOLATED);
@@ -5697,7 +5697,7 @@ void Aura::HandlePeriodicDamage(bool apply, bool Real)
         if (m_modifier.m_auraname == SPELL_AURA_PERIODIC_DAMAGE)
         {
             // SpellDamageBonusDone for magic spells
-            uint32 dmgClass = spellProto->GetDmgClass();
+            uint32 dmgClass = spellProto->DmgClass;
             if(dmgClass == SPELL_DAMAGE_CLASS_NONE || dmgClass == SPELL_DAMAGE_CLASS_MAGIC)
                 m_modifier.m_amount = caster->SpellDamageBonusDone(target, GetSpellProto(), m_modifier.m_amount, DOT, GetStackAmount());
             // MeleeDamagebonusDone for weapon based spells
@@ -7249,7 +7249,7 @@ void Aura::HandleSchoolAbsorb(bool apply, bool Real)
     {
         if (caster &&
             // Power Word: Shield
-            spellProto->SpellFamilyName == SPELLFAMILY_PRIEST && spellProto->GetMechanic() == MECHANIC_SHIELD &&
+            spellProto->SpellFamilyName == SPELLFAMILY_PRIEST && spellProto->Mechanic == MECHANIC_SHIELD &&
             (spellProto->SpellFamilyFlags & uint64(0x0000000000000001)) &&
             // completely absorbed or dispelled
             (m_removeMode == AURA_REMOVE_BY_SHIELD_BREAK || m_removeMode == AURA_REMOVE_BY_DISPEL))
@@ -7388,7 +7388,7 @@ void Aura::PeriodicTick()
                 pdamage = uint32(target->GetMaxHealth() * amount / 100);
 
             // SpellDamageBonus for magic spells
-            uint32 dmgClass = spellProto->GetDmgClass();
+            uint32 dmgClass = spellProto->DmgClass;
             if(dmgClass == SPELL_DAMAGE_CLASS_NONE || dmgClass == SPELL_DAMAGE_CLASS_MAGIC)
                 pdamage = target->SpellDamageBonusTaken(pCaster, spellProto, pdamage, DOT, GetStackAmount());
             // MeleeDamagebonus for weapon based spells
@@ -9072,7 +9072,7 @@ bool Aura::IsLastAuraOnHolder()
 
 bool Aura::HasMechanic(uint32 mechanic) const
 {
-    if (GetSpellProto()->GetMechanic() == mechanic)
+    if (GetSpellProto()->Mechanic == mechanic)
         return true;
 
     return m_spellEffect->EffectMechanic == mechanic;
@@ -9295,7 +9295,7 @@ void SpellAuraHolder::_AddSpellAuraHolder()
             m_target->ModifyAuraState(AURA_STATE_DEADLY_POISON, true);
 
         // Enrage aura state
-        if (m_spellProto->GetDispel() == DISPEL_ENRAGE)
+        if (m_spellProto->Dispel == DISPEL_ENRAGE)
             m_target->ModifyAuraState(AURA_STATE_ENRAGE, true);
 
         // Bleeding aura state
@@ -9355,7 +9355,7 @@ void SpellAuraHolder::_RemoveSpellAuraHolder()
         // Update target aura state flag (at last aura remove)
         //*****************************************************
         // Enrage aura state
-        if(m_spellProto->GetDispel() == DISPEL_ENRAGE)
+        if(m_spellProto->Dispel == DISPEL_ENRAGE)
             m_target->ModifyAuraState(AURA_STATE_ENRAGE, false);
 
         // Bleeding aura state
@@ -9814,7 +9814,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
             if (!apply)
             {
                 // Remove Blood Frenzy only if target no longer has any Deep Wound or Rend (applying is handled by procs)
-                if (GetSpellProto()->GetMechanic() != MECHANIC_BLEED)
+                if (GetSpellProto()->Mechanic != MECHANIC_BLEED)
                     return;
 
                 // If target still has one of Warrior's bleeds, do nothing
@@ -9822,7 +9822,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                 for(Unit::AuraList::const_iterator i = PeriodicDamage.begin(); i != PeriodicDamage.end(); ++i)
                     if( (*i)->GetCasterGuid() == GetCasterGuid() &&
                         (*i)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_WARRIOR &&
-                        (*i)->GetSpellProto()->GetMechanic() == MECHANIC_BLEED)
+                        (*i)->GetSpellProto()->Mechanic == MECHANIC_BLEED)
                         return;
 
                 spellId1 = 30069;                           // Blood Frenzy (Rank 1)
@@ -9908,7 +9908,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     return;
             }
             // Power Word: Shield
-            else if (apply && m_spellProto->SpellFamilyFlags & uint64(0x0000000000000001) && m_spellProto->GetMechanic() == MECHANIC_SHIELD)
+            else if (apply && m_spellProto->SpellFamilyFlags & uint64(0x0000000000000001) && m_spellProto->Mechanic == MECHANIC_SHIELD)
             {
                 Unit* caster = GetCaster();
                 if (!caster)
@@ -9975,7 +9975,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
         }
         case SPELLFAMILY_ROGUE:
             // Sprint (skip non player casted spells by category)
-            if (m_spellProto->SpellFamilyFlags & uint64(0x0000000000000040) && GetSpellProto()->GetCategory() == 44)
+            if (m_spellProto->SpellFamilyFlags & uint64(0x0000000000000040) && GetSpellProto()->Category == 44)
             {
                 if (!apply || m_target->HasAura(58039))     // Glyph of Blurred Speed
                     spellId1 = 61922;                       // Sprint (waterwalk)
@@ -10439,7 +10439,7 @@ void SpellAuraHolder::SetAuraMaxDuration(int32 duration)
 
 bool SpellAuraHolder::HasMechanic(uint32 mechanic) const
 {
-    if (mechanic == m_spellProto->GetMechanic())
+    if (mechanic == m_spellProto->Mechanic)
         return true;
 
     for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)
@@ -10455,7 +10455,7 @@ bool SpellAuraHolder::HasMechanic(uint32 mechanic) const
 
 bool SpellAuraHolder::HasMechanicMask(uint32 mechanicMask) const
 {
-    if (mechanicMask & (1 << (m_spellProto->GetMechanic() - 1)))
+    if (mechanicMask & (1 << (m_spellProto->Mechanic - 1)))
         return true;
 
     for (int32 i = 0; i < MAX_EFFECT_INDEX; ++i)

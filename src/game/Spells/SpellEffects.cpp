@@ -3606,7 +3606,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                             continue;
 
                         SpellEntry const* combatEntry = sSpellTemplate.LookupEntry<SpellEntry>(pEnchant->spellid[s]);
-                        if (!combatEntry || combatEntry->GetDispel() != DISPEL_POISON)
+                        if (!combatEntry || combatEntry->Dispel != DISPEL_POISON)
                             continue;
 
                         m_caster->CastSpell(unitTarget, combatEntry, TRIGGERED_OLD_TRIGGERED, item);
@@ -3653,7 +3653,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                 Unit::AuraList const& decSpeedList = unitTarget->GetAurasByType(SPELL_AURA_MOD_DECREASE_SPEED);
                 for (Unit::AuraList::const_iterator iter = decSpeedList.begin(); iter != decSpeedList.end(); ++iter)
                 {
-                    if ((*iter)->GetSpellProto()->SpellIconID==15 && (*iter)->GetSpellProto()->GetDispel()==0)
+                    if ((*iter)->GetSpellProto()->SpellIconID==15 && (*iter)->GetSpellProto()->Dispel==0)
                     {
                         found = true;
                         break;
@@ -4003,7 +4003,7 @@ void Spell::EffectDummy(SpellEffectEntry const* effect)
                 Unit::SpellAuraHolderMap const& auras = unitTarget->GetSpellAuraHolderMap();
                 for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
                 {
-                    if (itr->second->GetSpellProto()->GetDispel() == DISPEL_DISEASE &&
+                    if (itr->second->GetSpellProto()->Dispel == DISPEL_DISEASE &&
                         itr->second->GetCasterGuid() == m_caster->GetObjectGuid())
                     {
                         ++count;
@@ -5933,7 +5933,7 @@ bool Spell::DoSummonGuardian(CreatureSummonPositions& list, SummonPropertiesEntr
             found = true;
         }
 
-        if (found && !(m_spellInfo->DurationIndex && m_spellInfo->GetCategory()))
+        if (found && !(m_spellInfo->DurationIndex && m_spellInfo->Category))
             return false;
     }
 
@@ -6303,9 +6303,9 @@ void Spell::EffectDispel(SpellEffectEntry const* effect)
     for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
     {
         SpellAuraHolder *holder = itr->second;
-        if ((1<<holder->GetSpellProto()->GetDispel()) & dispelMask)
+        if ((1<<holder->GetSpellProto()->Dispel) & dispelMask)
         {
-            if(holder->GetSpellProto()->GetDispel() == DISPEL_MAGIC)
+            if(holder->GetSpellProto()->Dispel == DISPEL_MAGIC)
             {
                 bool positive;
                 if (!holder->IsPositive())
@@ -6319,7 +6319,7 @@ void Spell::EffectDispel(SpellEffectEntry const* effect)
                     continue;
             }
             // Unholy Blight prevents dispel of diseases from target
-            else if (holder->GetSpellProto()->GetDispel() == DISPEL_DISEASE)
+            else if (holder->GetSpellProto()->Dispel == DISPEL_DISEASE)
                 if (unitTarget->HasAura(50536))
                     continue;
 
@@ -6402,7 +6402,7 @@ void Spell::EffectDispel(SpellEffectEntry const* effect)
 
             // On success dispel
             // Devour Magic
-            if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->GetCategory() == SPELLCATEGORY_DEVOUR_MAGIC)
+            if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->Category == SPELLCATEGORY_DEVOUR_MAGIC)
             {
                 int32 heal_amount = m_spellInfo->CalculateSimpleValue(EFFECT_INDEX_1);
                 m_caster->CastCustomSpell(m_caster, 19658, &heal_amount, nullptr, nullptr, TRIGGERED_OLD_TRIGGERED);
@@ -7150,7 +7150,7 @@ void Spell::EffectWeaponDmg(SpellEffectEntry const* effect)
                     Unit::SpellAuraHolderMap const& auras = unitTarget->GetSpellAuraHolderMap();
                     for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
                     {
-                        if(itr->second->GetSpellProto()->GetDispel() == DISPEL_POISON)
+                        if(itr->second->GetSpellProto()->Dispel == DISPEL_POISON)
                         {
                             found = true;
                             break;
@@ -7238,7 +7238,7 @@ void Spell::EffectWeaponDmg(SpellEffectEntry const* effect)
                 Unit::SpellAuraHolderMap const& auras = unitTarget->GetSpellAuraHolderMap();
                 for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
                 {
-                    if(itr->second->GetSpellProto()->GetDispel() == DISPEL_DISEASE &&
+                    if(itr->second->GetSpellProto()->Dispel == DISPEL_DISEASE &&
                         itr->second->GetCasterGuid() == m_caster->GetObjectGuid())
                         ++count;
                 }
@@ -7399,7 +7399,7 @@ void Spell::EffectInterruptCast(SpellEffectEntry const* /*effect*/)
         {
             SpellEntry const* curSpellInfo = spell->m_spellInfo;
             // check if we can interrupt spell
-            if ((curSpellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT) && curSpellInfo->GetPreventionType() == SPELL_PREVENTION_TYPE_SILENCE )
+            if ((curSpellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_INTERRUPT) && curSpellInfo->PreventionType == SPELL_PREVENTION_TYPE_SILENCE )
             {
                 unitTarget->LockOutSpells(GetSpellSchoolMask(curSpellInfo), GetSpellDuration(m_spellInfo));
                 unitTarget->InterruptSpell(CurrentSpellTypes(i), false);
@@ -10360,7 +10360,7 @@ void Spell::EffectScriptEffect(SpellEffectEntry const* effect)
         case SPELLFAMILY_PALADIN:
         {
             // Judgement (seal trigger)
-            if (m_spellInfo->GetCategory() == SPELLCATEGORY_JUDGEMENT)
+            if (m_spellInfo->Category == SPELLCATEGORY_JUDGEMENT)
             {
                 if (!unitTarget || !unitTarget->IsAlive())
                     return;
@@ -11816,7 +11816,7 @@ void Spell::EffectStealBeneficialBuff(SpellEffectEntry const* effect)
     for (Unit::SpellAuraHolderMap::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
     {
         SpellAuraHolder *holder = itr->second;
-        if (holder && (1<<holder->GetSpellProto()->GetDispel()) & dispelMask)
+        if (holder && (1<<holder->GetSpellProto()->Dispel) & dispelMask)
         {
             // Need check for passive? this
             if (holder->IsPositive() && !holder->IsPassive() && !holder->GetSpellProto()->HasAttribute(SPELL_ATTR_EX4_NOT_STEALABLE))

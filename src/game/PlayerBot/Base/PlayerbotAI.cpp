@@ -4237,7 +4237,7 @@ bool PlayerbotAI::IsRegenerating()
         SpellEntry const* spell = aura->second->GetSpellProto();
         if (!spell)
             continue;
-        if (spell->GetCategory() == 59 || spell->GetCategory() == 11){
+        if (spell->Category == 59 || spell->Category == 11){
             return true;
         }
     }

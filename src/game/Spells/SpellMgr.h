@@ -337,7 +337,7 @@ inline bool IsSpellEffectAbleToCrit(const SpellEntry* entry, SpellEffectIndex in
         case SPELL_EFFECT_NORMALIZED_WEAPON_DMG:
             return true;
         case SPELL_EFFECT_ENERGIZE: // Mana Potion and similar spells, Lay on hands
-            return (spellEffect->EffectMiscValue == POWER_MANA && entry->SpellFamilyName && entry->GetDmgClass());
+            return (spellEffect->EffectMiscValue == POWER_MANA && entry->SpellFamilyName && entry->DmgClass);
     }
     return false;
 }
@@ -1224,7 +1224,7 @@ inline bool IsAutoRepeatRangedSpell(SpellEntry const* spellInfo)
 
 inline bool IsSpellRequiresRangedAP(SpellEntry const* spellInfo)
 {
-    return (spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && spellInfo->GetDmgClass() != SPELL_DAMAGE_CLASS_MELEE);
+    return (spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && spellInfo->DmgClass != SPELL_DAMAGE_CLASS_MELEE);
 }
 
 uint32 GetAffectedTargets(SpellEntry const* spellInfo, Unit* caster);
@@ -1252,7 +1252,7 @@ inline bool IsNeedCastSpellAtOutdoor(SpellEntry const* spellInfo)
 
 inline bool IsReflectableSpell(SpellEntry const* spellInfo)
 {
-    return spellInfo->GetDmgClass() == SPELL_DAMAGE_CLASS_MAGIC && !spellInfo->HasAttribute(SPELL_ATTR_ABILITY)
+    return spellInfo->DmgClass == SPELL_DAMAGE_CLASS_MAGIC && !spellInfo->HasAttribute(SPELL_ATTR_ABILITY)
         && !spellInfo->HasAttribute(SPELL_ATTR_EX_CANT_BE_REFLECTED) && !spellInfo->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
         && !spellInfo->HasAttribute(SPELL_ATTR_PASSIVE) && !IsPositiveSpell(spellInfo);
 }
@@ -1285,7 +1285,7 @@ inline uint32 GetSpellMechanicMask(SpellEntry const* spellInfo, uint32 effectMas
 {
     uint32 mask = 0;
 
-    if (uint32 mech = spellInfo->GetMechanic())
+    if (uint32 mech = spellInfo->Mechanic)
         mask |= 1 << (mech - 1);
 
     for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
@@ -1306,10 +1306,9 @@ inline uint32 GetSpellMechanicMask(SpellEntry const* spellInfo, uint32 effectMas
 
 inline uint32 GetAllSpellMechanicMask(SpellEntry const* spellInfo)
 {
-    SpellCategoriesEntry const* spellCategory = spellInfo->GetSpellCategories();
     uint32 mask = 0;
-    if (spellCategory && spellCategory->Mechanic)
-        mask |= 1 << (spellCategory->Mechanic - 1);
+    if (spellInfo->Mechanic)
+        mask |= 1 << (spellInfo->Mechanic - 1);
 
     for (int i=0; i< MAX_EFFECT_INDEX; ++i)
     {
@@ -1326,9 +1325,8 @@ inline Mechanics GetEffectMechanic(SpellEntry const* spellInfo, SpellEffectIndex
     SpellEffectEntry const* effectEntry = spellInfo->GetSpellEffect(SpellEffectIndex(effect));
     if (effectEntry && effectEntry->EffectMechanic)
         return Mechanics(effectEntry->EffectMechanic);
-    SpellCategoriesEntry const* spellCategory = spellInfo->GetSpellCategories();
-    if (spellCategory && spellCategory->Mechanic)
-        return Mechanics(spellCategory->Mechanic);
+    if (spellInfo->Mechanic)
+        return Mechanics(spellInfo->Mechanic);
     return MECHANIC_NONE;
 }
 

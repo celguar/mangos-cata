@@ -39,11 +39,6 @@ ClassFamilyMask const& SpellEntry::GetEffectSpellClassMask(SpellEffectIndex eff)
     return emptyCFM;
 }
 
-SpellCategoriesEntry const* SpellEntry::GetSpellCategories() const
-{
-    return SpellCategoriesId ? sSpellCategoriesStore.LookupEntry(SpellCategoriesId) : NULL;
-}
-
 SpellEffectEntry const* SpellEntry::GetSpellEffect(SpellEffectIndex eff) const
 {
     return GetSpellEffectEntry(Id, eff);
@@ -62,42 +57,6 @@ SpellTargetRestrictionsEntry const* SpellEntry::GetSpellTargetRestrictions() con
 SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
 {
     return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
-}
-
-uint32 SpellEntry::GetPreventionType() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->PreventionType : 0;
-}
-
-uint32 SpellEntry::GetCategory() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->Category : 0;
-}
-
-uint32 SpellEntry::GetMechanic() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->Mechanic : 0;
-}
-
-uint32 SpellEntry::GetStartRecoveryCategory() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->StartRecoveryCategory : 0;
-}
-
-uint32 SpellEntry::GetDmgClass() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->DmgClass : 0;
-}
-
-uint32 SpellEntry::GetDispel() const
-{
-    SpellCategoriesEntry const* cat = GetSpellCategories();
-    return cat ? cat->Dispel : 0;
 }
 
 uint32 SpellEntry::GetMaxAffectedTargets() const

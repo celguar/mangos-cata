@@ -2087,7 +2087,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit* pVictim, uint32 damage, Aura
                 case 31877:
                 case 31878:
                     // triggered only at casted Judgement spells, not at additional Judgement effects
-                    if(!procSpell || procSpell->GetCategory() != 1210)
+                    if(!procSpell || procSpell->Category != 1210)
                         return SPELL_AURA_PROC_FAILED;
 
                     target = this;
@@ -4041,7 +4041,7 @@ SpellAuraProcResult Unit::HandleModPowerCostSchoolAuraProc(Unit* /*pVictim*/, ui
 SpellAuraProcResult Unit::HandleMechanicImmuneResistanceAuraProc(Unit* /*pVictim*/, uint32 /*damage*/, Aura* triggeredByAura, SpellEntry const* procSpell, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/)
 {
     // Compare mechanic
-   return !(procSpell == nullptr || int32(procSpell->GetMechanic()) != triggeredByAura->GetModifier()->m_miscvalue)
+   return !(procSpell == nullptr || int32(procSpell->Mechanic) != triggeredByAura->GetModifier()->m_miscvalue)
        ? SPELL_AURA_PROC_OK : SPELL_AURA_PROC_FAILED;
 }
 

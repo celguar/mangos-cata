@@ -186,7 +186,6 @@ SpellEffectMap sSpellEffectMap;
 //Keep in DBC
 
 DBCStorage <SpellCastTimesEntry> sSpellCastTimesStore(SpellCastTimefmt);
-DBCStorage <SpellCategoriesEntry> sSpellCategoriesStore(SpellCategoriesEntryfmt);
 DBCStorage <SpellDifficultyEntry> sSpellDifficultyStore(SpellDifficultyfmt);
 DBCStorage <SpellDurationEntry> sSpellDurationStore(SpellDurationfmt);
 DBCStorage <SpellFocusObjectEntry> sSpellFocusObjectStore(SpellFocusObjectfmt);
@@ -578,24 +577,6 @@ void LoadDBCStores(const std::string& dataPath)
     LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSkillLineAbilityStore,    dbcPath,"SkillLineAbility.dbc");
     LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSkillRaceClassInfoStore,  dbcPath,"SkillRaceClassInfo.dbc");
     LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSoundEntriesStore,        dbcPath,"SoundEntries.dbc");
-
-    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sSpellCategoriesStore,     dbcPath,"SpellCategories.dbc");
-
-    for(uint32 i = 1; i < sSpellTemplate.GetMaxEntry(); ++i)
-    {
-        if(SpellEntry const * spell = sSpellTemplate.LookupEntry<SpellEntry>(i))
-        {
-            if(SpellCategoriesEntry const* category = spell->GetSpellCategories())
-                if(uint32 cat = category->Category)
-                    sSpellCategoryStore[cat].insert(i);
-
-            // DBC not support uint64 fields but SpellEntry have SpellFamilyFlags mapped at 2 uint32 fields
-            // uint32 field already converted to bigendian if need, but must be swapped for correct uint64 bigendian view
-            #if MANGOS_ENDIAN == MANGOS_BIG_ENDIAN
-            std::swap(*((uint32*)(&spell->SpellFamilyFlags)),*(((uint32*)(&spell->SpellFamilyFlags))+1));
-            #endif
-        }
-    }
 
     for(uint32 i = 1; i < sSpellEffectStore.GetMaxEntry(); ++i)
     {
