@@ -247,13 +247,10 @@ inline bool IsLootCraftingSpell(SpellEntry const* spellInfo)
     if (!spellEffect0)
         return false;
 
-    SpellTotemsEntry const* totems = spellInfo->GetSpellTotems();
-
     return spellEffect0->Effect == SPELL_EFFECT_CREATE_RANDOM_ITEM ||
         // different random cards from Inscription (121==Virtuoso Inking Set category) or without explicit item or explicit spells
         spellEffect0->Effect == SPELL_EFFECT_CREATE_ITEM_2 &&
-        (totems && totems->TotemCategory[0] != 0 || spellEffect0->EffectItemType == 0) ||
-        spellInfo->Id == 62941;
+        (spellInfo->TotemCategory[0] != 0 || spellEffect0->EffectItemType == 0) || spellInfo->Id == 62941;
 }
 
 inline bool IsSpellEffectTriggerSpell(const SpellEntry* entry, SpellEffectIndex effIndex)

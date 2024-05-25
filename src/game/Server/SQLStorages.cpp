@@ -35,7 +35,7 @@ const char InstanceTemplatedstfmt[] = "iiiiil";
 const char WorldTemplatesrcfmt[] = "is";
 const char WorldTemplatedstfmt[] = "ii";
 const char ConditionsFmt[] = "iiiix";
-const char SpellEntryfmt[] = "iiiiiiiiiiiiiiiiiifiiiissiiiiiiiiiiiiiiiiiiiiiiiiiiLiiiiiiiiiiiiiiiiiifiiiiiiiiiiiiiiiiii";
+const char SpellEntryfmt[] = "iiiiiiiiiiiiiiiiiifiiiissiiiiiiiiiiiiiiiiiiiiiiiiiiLiiiiiiiiiiiiiiiiiifiiiiiiiiiiiiiiiiiiiii";
 //const char SpellTemplatesrcfmt[] = "iiiiiiiiiiiiiiiix";
 //                                  0         10        20        30        40        50        60        70        80        90        100       110       120       130       140       150       160     170       180  185
 //const char SpellTemplatedstfmt[] = "ixxxiiiixxxxxxxxxxxxxxxxxxxxxxxxiixxxxixxxxxxFxxxxxxxxxxxxxxxxxxxxxxixxxxxFFFxxxxxxixxixxixxixxxxxFFFxxxxxxixxixxixxFFFxxxxxxxxxxxxxppppppppppppppppppppppppppppppppxxxxxxxxxxxFFFxxxxxx";

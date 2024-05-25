@@ -4188,18 +4188,16 @@ void Spell::SendCastResult(Player* caster, SpellEntry const* spellInfo, uint8 ca
             break;
         case SPELL_FAILED_TOTEMS:
             {
-                SpellTotemsEntry const* totems = spellInfo->GetSpellTotems();
                 for(int i = 0; i < MAX_SPELL_TOTEMS; ++i)
-                    if(totems && totems->Totem[i])
-                        data << uint32(totems->Totem[i]);
+                    if(spellInfo->Totem[i])
+                        data << uint32(spellInfo->Totem[i]);
             }
             break;
         case SPELL_FAILED_TOTEM_CATEGORY:
             {
-                SpellTotemsEntry const* totems = spellInfo->GetSpellTotems();
                 for(int i = 0; i < MAX_SPELL_TOTEM_CATEGORIES; ++i)
-                    if(totems && totems->TotemCategory[i])
-                        data << uint32(totems->TotemCategory[i]);
+                    if(spellInfo->TotemCategory[i])
+                        data << uint32(spellInfo->TotemCategory[i]);
             }
             break;
         case SPELL_FAILED_EQUIPPED_ITEM_CLASS:
@@ -7284,24 +7282,20 @@ SpellCastResult Spell::CheckItems()
         }
 
         // check totem-item requirements (items presence in inventory)
-        SpellTotemsEntry const* spellTotems = m_spellInfo->GetSpellTotems();
-        if(spellTotems)
+        uint32 totems = MAX_SPELL_TOTEMS;
+        for(auto i : m_spellInfo->Totem)
         {
-            uint32 totems = MAX_SPELL_TOTEMS;
-            for(int i = 0; i < MAX_SPELL_TOTEMS ; ++i)
+            if (i != 0)
             {
-                if (spellTotems->Totem[i] != 0)
+                if (p_caster->HasItemCount(i, 1))
                 {
-                    if (p_caster->HasItemCount(spellTotems->Totem[i], 1))
-                    {
-                        totems -= 1;
-                        continue;
-                    }
-                }
-                else
                     totems -= 1;
+                    continue;
+                }
             }
-
+            else
+                totems -= 1;
+        
             if (totems != 0)
                 return SPELL_FAILED_TOTEMS;
         }

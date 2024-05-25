@@ -1904,14 +1904,6 @@ struct SpellTargetRestrictionsEntry
     uint32    Targets;                                      // 4 - m_targets
 };
 
-// SpellTotems.dbc
-struct SpellTotemsEntry
-{
-    //uint32    Id;                                         // 0        m_ID
-    uint32    TotemCategory[MAX_SPELL_TOTEM_CATEGORIES];    // 1 2      m_requiredTotemCategoryID
-    uint32    Totem[MAX_SPELL_TOTEMS];                      // 3 4      m_totem
-};
-
 struct SpellEntry
 {
     uint32    Id;                                           // 0        m_ID
@@ -1993,8 +1985,9 @@ struct SpellEntry
     int32  Reagent[MAX_SPELL_REAGENTS];                     // 79-86    m_reagent
     uint32 ReagentCount[MAX_SPELL_REAGENTS];                // 87-94    m_reagentCount
     uint32 SpellTargetRestrictionsId;                       // 95       SpellTargetRestrictions.dbc
-    uint32 SpellTotemsId;                                   // 96       SpellTotems.dbc
-    //uint32 ResearchProjectId;                             // 97       ResearchProject.dbc
+    uint32 TotemCategory[MAX_SPELL_TOTEM_CATEGORIES];       // 96-97    m_requiredTotemCategoryID
+    uint32 Totem[MAX_SPELL_TOTEMS];                         // 98-99    m_totem
+    //uint32 ResearchProjectId;                             // 100      ResearchProject.dbc
 
     // helpers
     int32 CalculateSimpleValue(SpellEffectIndex eff) const;
@@ -2004,7 +1997,6 @@ struct SpellEntry
     SpellEffectEntry const* GetSpellEffect(SpellEffectIndex eff) const;
     SpellScalingEntry const* GetSpellScaling() const;
     SpellTargetRestrictionsEntry const* GetSpellTargetRestrictions() const;
-    SpellTotemsEntry const* GetSpellTotems() const;
 
     // single fields
     uint32 GetMaxAffectedTargets() const;

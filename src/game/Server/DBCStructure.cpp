@@ -54,11 +54,6 @@ SpellTargetRestrictionsEntry const* SpellEntry::GetSpellTargetRestrictions() con
     return SpellTargetRestrictionsId ? sSpellTargetRestrictionsStore.LookupEntry(SpellTargetRestrictionsId) : NULL;
 }
 
-SpellTotemsEntry const* SpellEntry::GetSpellTotems() const
-{
-    return SpellTotemsId ? sSpellTotemsStore.LookupEntry(SpellTotemsId) : NULL;
-}
-
 uint32 SpellEntry::GetMaxAffectedTargets() const
 {
     SpellTargetRestrictionsEntry const* target = GetSpellTargetRestrictions();
