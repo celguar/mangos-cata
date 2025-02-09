@@ -488,11 +488,11 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* pQuest, ObjectGuid guid
         uint32 rewChocieItemCount = pQuest->GetRewChoiceItemsCount();
         data << uint32(rewChocieItemCount);
 
-        for (uint32 i = 0; i < rewChocieItemCount; ++i)
+        for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
             data << uint32(pQuest->RewChoiceItemId[i]);
-        for (uint32 i = 0; i < rewChocieItemCount; ++i)
+        for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
             data << uint32(pQuest->RewChoiceItemCount[i]);
-        for (uint32 i = 0; i < rewChocieItemCount; ++i)
+        for (uint32 i = 0; i < QUEST_REWARD_CHOICES_COUNT; ++i)
             if (ItemPrototype const* IProto = ObjectMgr::GetItemPrototype(pQuest->RewChoiceItemId[i]))
                 data << uint32(IProto->DisplayInfoID);
             else
@@ -501,11 +501,11 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const* pQuest, ObjectGuid guid
         uint32 rewItemCount = pQuest->GetRewItemsCount();
         data << uint32(rewItemCount);
 
-        for (uint32 i = 0; i < rewItemCount; ++i)
+        for (uint32 i = 0; i < QUEST_REWARDS_COUNT; ++i)
             data << uint32(pQuest->RewItemId[i]);
-        for (uint32 i = 0; i < rewItemCount; ++i)
+        for (uint32 i = 0; i < QUEST_REWARDS_COUNT; ++i)
             data << uint32(pQuest->RewItemCount[i]);
-        for (uint32 i = 0; i < rewItemCount; ++i)
+        for (uint32 i = 0; i < QUEST_REWARDS_COUNT; ++i)
             if (ItemPrototype const* IProto = ObjectMgr::GetItemPrototype(pQuest->RewItemId[i]))
                 data << uint32(IProto->DisplayInfoID);
             else
